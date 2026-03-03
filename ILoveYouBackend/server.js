@@ -63,6 +63,20 @@ init().then(() => {
 
 const jwt = require("jsonwebtoken");
 
+app.get("/Hello", async (req, res) => {
+    try {
+        res.status(201).json({
+            message: "Hello, ILoveYou is live!"
+        });
+    } catch (error) {
+        console.error("Hello Error:", error);
+
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+})
+
 app.post("/signup", async (req, res) => {
     try {
         const { email, username, password, dateOfBirth, pronouns, location } = req.body;
