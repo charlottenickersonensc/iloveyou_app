@@ -6,17 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileReference section */
-		0DB776E82F5D0E890090E94F /* welcome+intro_page.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "welcome+intro_page.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXBuildFile section */
+		0D8707D22F5FE488007D5BE7 /* DaysOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D8707D12F5FE488007D5BE7 /* DaysOne-Regular.ttf */; };
+		0DB776FC2F5D0F110090E94F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB776F92F5D0F110090E94F /* ContentView.swift */; };
+		0DB776FD2F5D0F110090E94F /* welcome_intro_pageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB776FA2F5D0F110090E94F /* welcome_intro_pageApp.swift */; };
+		0DB776FE2F5D0F110090E94F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB776F82F5D0F110090E94F /* Assets.xcassets */; };
+		0DB777042F5D101B0090E94F /* Jost-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DB777032F5D101B0090E94F /* Jost-ExtraBold.ttf */; };
+		0DB777062F5D10260090E94F /* Jost-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DB777052F5D10260090E94F /* Jost-Medium.ttf */; };
+/* End PBXBuildFile section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		0DB776EA2F5D0E890090E94F /* welcome+intro_page */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "welcome+intro_page";
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFileReference section */
+		0D8707D12F5FE488007D5BE7 /* DaysOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DaysOne-Regular.ttf"; sourceTree = "<group>"; };
+		0DB776E82F5D0E890090E94F /* welcome+intro_page.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "welcome+intro_page.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DB776F82F5D0F110090E94F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0DB776F92F5D0F110090E94F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0DB776FA2F5D0F110090E94F /* welcome_intro_pageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = welcome_intro_pageApp.swift; sourceTree = "<group>"; };
+		0DB777032F5D101B0090E94F /* Jost-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-ExtraBold.ttf"; sourceTree = "<group>"; };
+		0DB777052F5D10260090E94F /* Jost-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Medium.ttf"; sourceTree = "<group>"; };
+		0DB777072F5D137F0090E94F /* welcome-intro-page-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "welcome-intro-page-Info.plist"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		0DB776E52F5D0E890090E94F /* Frameworks */ = {
@@ -32,7 +40,7 @@
 		0DB776DF2F5D0E890090E94F = {
 			isa = PBXGroup;
 			children = (
-				0DB776EA2F5D0E890090E94F /* welcome+intro_page */,
+				0DB776FB2F5D0F110090E94F /* welcome+intro_page */,
 				0DB776E92F5D0E890090E94F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +51,28 @@
 				0DB776E82F5D0E890090E94F /* welcome+intro_page.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0DB776F72F5D0F110090E94F /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				0DB777032F5D101B0090E94F /* Jost-ExtraBold.ttf */,
+				0DB777052F5D10260090E94F /* Jost-Medium.ttf */,
+				0D8707D12F5FE488007D5BE7 /* DaysOne-Regular.ttf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		0DB776FB2F5D0F110090E94F /* welcome+intro_page */ = {
+			isa = PBXGroup;
+			children = (
+				0DB777072F5D137F0090E94F /* welcome-intro-page-Info.plist */,
+				0DB776F72F5D0F110090E94F /* Font */,
+				0DB776F82F5D0F110090E94F /* Assets.xcassets */,
+				0DB776F92F5D0F110090E94F /* ContentView.swift */,
+				0DB776FA2F5D0F110090E94F /* welcome_intro_pageApp.swift */,
+			);
+			path = "welcome+intro_page";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +89,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				0DB776EA2F5D0E890090E94F /* welcome+intro_page */,
 			);
 			name = "welcome+intro_page";
 			packageProductDependencies = (
@@ -109,6 +136,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DB777062F5D10260090E94F /* Jost-Medium.ttf in Resources */,
+				0D8707D22F5FE488007D5BE7 /* DaysOne-Regular.ttf in Resources */,
+				0DB777042F5D101B0090E94F /* Jost-ExtraBold.ttf in Resources */,
+				0DB776FE2F5D0F110090E94F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +150,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DB776FC2F5D0F110090E94F /* ContentView.swift in Sources */,
+				0DB776FD2F5D0F110090E94F /* welcome_intro_pageApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +286,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "welcome-intro-page-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +318,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "welcome-intro-page-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
