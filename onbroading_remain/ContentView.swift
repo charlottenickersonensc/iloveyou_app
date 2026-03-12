@@ -1,24 +1,25 @@
-//
-//  ContentView.swift
-//  onbroading_remain
-//
-//  Created by Yutong on 3/8/26.
-//
-
 import SwiftUI
 
+// MARK: - App Entry Point
+// Hands off immediately to OnboardingCoordinator which owns
+// the NavigationStack and all route definitions.
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        OnboardingCoordinator()
     }
 }
 
 #Preview {
     ContentView()
 }
+
+
+
+
+
+
+
+
+
+
+
