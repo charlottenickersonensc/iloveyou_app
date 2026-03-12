@@ -80,6 +80,34 @@ app.get("/hello", async (req, res) => {
     }
 });
 
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({
+            error: "Access token required"
+        });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            if (err.name === "TokenExpiredError") {
+                return res.status(401).json({
+                    error: "Token expired"
+                });
+            }
+
+            return res.status(403).json({
+                error: "Invalid token"
+            });
+        }
+
+        req.user = user;
+        next();
+    });
+};
+
 // =========================
 // 3️⃣ Signup Route
 // =========================
@@ -137,7 +165,7 @@ app.post("/signup", async (req, res) => {
         // -------------------------
         // 6️⃣ Assign random fruit
         // -------------------------
-        const fruits = ["Apple", "Banana", "Mango", "Orange", "Strawberry", "Pineapple", "Grapes", "Watermelon", "Peach", "Cherry"];
+        const fruits = ["Apple", "Banana", "Mango", "Orange", "Strawberry", "Pineapple", "Grapes", "Watermelon", "Peach", "Cherry", "Blueberry", "Raspberry"];
         const randomFruit = fruits[Math.floor(Math.random() * fruits.length)];
 
         // -------------------------
@@ -235,5 +263,44 @@ app.post("/login", async (req, res) => {
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.patch("/account/privacy", authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { isPrivate } = req.body;
+
+        if (typeof isPrivate !== "boolean") {
+            return res.status(400).json({
+                error: "isPrivate must be a boolean value"
+            });
+        }
+
+        const result = await pool.query(
+            `UPDATE users
+       SET is_private = $1,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2
+       RETURNING id, username, is_private`,
+            [isPrivate, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+
+        res.status(200).json({
+            message: `Account is now ${isPrivate ? "private" : "public"}`,
+            user: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("Privacy Update Error:", error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
     }
 });
