@@ -6,64 +6,34 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		0D60FCD32F61430F0008DFFC /* Inter_18pt-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D60FCD22F61430F0008DFFC /* Inter_18pt-Regular.ttf */; };
-		0D60FCD52F6143BB0008DFFC /* Inter_18pt-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D60FCD42F6143BB0008DFFC /* Inter_18pt-Bold.ttf */; };
-		0D60FCD92F6201B00008DFFC /* Inter_18pt-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D60FCD82F6201B00008DFFC /* Inter_18pt-Black.ttf */; };
-		0D60FCDB2F6201BB0008DFFC /* Jost-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D60FCDA2F6201BB0008DFFC /* Jost-Black.ttf */; };
-		0D60FCDD2F621DC50008DFFC /* Inter_18pt-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D60FCDC2F621DC50008DFFC /* Inter_18pt-Medium.ttf */; };
-		0D60FCE62F6268820008DFFC /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCE52F6268780008DFFC /* SharedComponents.swift */; };
-		0D60FCE82F6268AC0008DFFC /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCE72F62689C0008DFFC /* OnboardingCoordinator.swift */; };
-		0D60FCEC2F62696A0008DFFC /* MeetYourCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCEB2F62695D0008DFFC /* MeetYourCommunityView.swift */; };
-		0D60FCEE2F6269830008DFFC /* WelcomeSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCED2F6269760008DFFC /* WelcomeSignUpView.swift */; };
-		0D60FCF02F6269A50008DFFC /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCEF2F6269980008DFFC /* CreateAccountView.swift */; };
-		0D60FCF22F6269CA0008DFFC /* VerifyAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCF12F6269BE0008DFFC /* VerifyAccountView.swift */; };
-		0D60FCF42F6269EF0008DFFC /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCF32F6269E60008DFFC /* TermsAndConditionsView.swift */; };
-		0D60FCF62F626A0C0008DFFC /* BeginCommunitySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCF52F626A010008DFFC /* BeginCommunitySearchView.swift */; };
-		0D60FCF82F626A220008DFFC /* JoinCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCF72F626A190008DFFC /* JoinCommunityView.swift */; };
-		0D60FCFA2F626A380008DFFC /* SelectedCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCF92F626A2E0008DFFC /* SelectedCommunityView.swift */; };
-		0D60FCFC2F626A5A0008DFFC /* CustomizedProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCFB2F626A500008DFFC /* CustomizedProfileView.swift */; };
-		0D60FCFE2F626A770008DFFC /* CustomizedProfileView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FCFD2F626A690008DFFC /* CustomizedProfileView2.swift */; };
-		0D60FD022F626AB20008DFFC /* CustomizePFPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FD012F626AA90008DFFC /* CustomizePFPView.swift */; };
-		0D60FD042F626AD20008DFFC /* Onboard1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FD032F626ACC0008DFFC /* Onboard1View.swift */; };
-		0D60FD062F626AE70008DFFC /* Onboard2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FD052F626AE20008DFFC /* Onboard2View.swift */; };
-		0D60FD082F626AF90008DFFC /* Onboard3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D60FD072F626AF20008DFFC /* Onboard3View.swift */; };
-		0D8707D52F5FE9A0007D5BE7 /* Jost-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D8707D42F5FE9A0007D5BE7 /* Jost-Bold.ttf */; };
-		0DB777352F5D94230090E94F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB777312F5D94230090E94F /* Assets.xcassets */; };
-		0DB777362F5D94230090E94F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB777322F5D94230090E94F /* ContentView.swift */; };
-		0DB777372F5D94230090E94F /* onbroading_remainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB777332F5D94230090E94F /* onbroading_remainApp.swift */; };
-		0DB7773A2F5D94400090E94F /* DaysOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DB777392F5D94400090E94F /* DaysOne-Regular.ttf */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
-		0D60FCD22F61430F0008DFFC /* Inter_18pt-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Regular.ttf"; sourceTree = "<group>"; };
-		0D60FCD42F6143BB0008DFFC /* Inter_18pt-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Bold.ttf"; sourceTree = "<group>"; };
-		0D60FCD82F6201B00008DFFC /* Inter_18pt-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Black.ttf"; sourceTree = "<group>"; };
-		0D60FCDA2F6201BB0008DFFC /* Jost-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Black.ttf"; sourceTree = "<group>"; };
-		0D60FCDC2F621DC50008DFFC /* Inter_18pt-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Medium.ttf"; sourceTree = "<group>"; };
-		0D60FCE52F6268780008DFFC /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
-		0D60FCE72F62689C0008DFFC /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
-		0D60FCEB2F62695D0008DFFC /* MeetYourCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetYourCommunityView.swift; sourceTree = "<group>"; };
-		0D60FCED2F6269760008DFFC /* WelcomeSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSignUpView.swift; sourceTree = "<group>"; };
-		0D60FCEF2F6269980008DFFC /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
-		0D60FCF12F6269BE0008DFFC /* VerifyAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyAccountView.swift; sourceTree = "<group>"; };
-		0D60FCF32F6269E60008DFFC /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
-		0D60FCF52F626A010008DFFC /* BeginCommunitySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginCommunitySearchView.swift; sourceTree = "<group>"; };
-		0D60FCF72F626A190008DFFC /* JoinCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCommunityView.swift; sourceTree = "<group>"; };
-		0D60FCF92F626A2E0008DFFC /* SelectedCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCommunityView.swift; sourceTree = "<group>"; };
-		0D60FCFB2F626A500008DFFC /* CustomizedProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedProfileView.swift; sourceTree = "<group>"; };
-		0D60FCFD2F626A690008DFFC /* CustomizedProfileView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedProfileView2.swift; sourceTree = "<group>"; };
-		0D60FD012F626AA90008DFFC /* CustomizePFPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizePFPView.swift; sourceTree = "<group>"; };
-		0D60FD032F626ACC0008DFFC /* Onboard1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard1View.swift; sourceTree = "<group>"; };
-		0D60FD052F626AE20008DFFC /* Onboard2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard2View.swift; sourceTree = "<group>"; };
-		0D60FD072F626AF20008DFFC /* Onboard3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard3View.swift; sourceTree = "<group>"; };
-		0D8707D32F5FE700007D5BE7 /* onbroading-remain-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "onbroading-remain-Info.plist"; sourceTree = SOURCE_ROOT; };
-		0D8707D42F5FE9A0007D5BE7 /* Jost-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Bold.ttf"; sourceTree = "<group>"; };
+		0D60FD202F6280E70008DFFC /* DaysOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DaysOne-Regular.ttf"; sourceTree = "<group>"; };
+		0D60FD222F6280E70008DFFC /* Inter_18pt-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Black.ttf"; sourceTree = "<group>"; };
+		0D60FD242F6280E70008DFFC /* Inter_18pt-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Bold.ttf"; sourceTree = "<group>"; };
+		0D60FD262F6280E70008DFFC /* Inter_18pt-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Medium.ttf"; sourceTree = "<group>"; };
+		0D60FD282F6280E70008DFFC /* Inter_18pt-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Regular.ttf"; sourceTree = "<group>"; };
+		0D60FD2A2F6280E70008DFFC /* Jost-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Black.ttf"; sourceTree = "<group>"; };
+		0D60FD2C2F6280E70008DFFC /* Jost-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Bold.ttf"; sourceTree = "<group>"; };
+		0D60FD302F6280E70008DFFC /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
+		0D60FD342F6280E70008DFFC /* BeginCommunitySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginCommunitySearchView.swift; sourceTree = "<group>"; };
+		0D60FD362F6280E70008DFFC /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
+		0D60FD382F6280E70008DFFC /* CustomizedProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedProfileView.swift; sourceTree = "<group>"; };
+		0D60FD3A2F6280E70008DFFC /* CustomizedProfileView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizedProfileView2.swift; sourceTree = "<group>"; };
+		0D60FD3C2F6280E70008DFFC /* CustomizePFPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizePFPView.swift; sourceTree = "<group>"; };
+		0D60FD3E2F6280E70008DFFC /* JoinCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCommunityView.swift; sourceTree = "<group>"; };
+		0D60FD402F6280E70008DFFC /* MeetYourCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetYourCommunityView.swift; sourceTree = "<group>"; };
+		0D60FD422F6280E70008DFFC /* Onboard1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard1View.swift; sourceTree = "<group>"; };
+		0D60FD442F6280E70008DFFC /* Onboard2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard2View.swift; sourceTree = "<group>"; };
+		0D60FD462F6280E70008DFFC /* Onboard3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboard3View.swift; sourceTree = "<group>"; };
+		0D60FD482F6280E70008DFFC /* SelectedCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCommunityView.swift; sourceTree = "<group>"; };
+		0D60FD4A2F6280E70008DFFC /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
+		0D60FD4C2F6280E70008DFFC /* VerifyAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyAccountView.swift; sourceTree = "<group>"; };
+		0D60FD4E2F6280E70008DFFC /* WelcomeSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSignUpView.swift; sourceTree = "<group>"; };
+		0D60FD522F6280E70008DFFC /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
+		0D60FD562F6280E70008DFFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0D60FD582F6280E70008DFFC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0D60FD5A2F6280E70008DFFC /* onbroading_remainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = onbroading_remainApp.swift; sourceTree = "<group>"; };
 		0DB777112F5D89080090E94F /* onbroading_remain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = onbroading_remain.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0DB777312F5D94230090E94F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0DB777322F5D94230090E94F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		0DB777332F5D94230090E94F /* onbroading_remainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = onbroading_remainApp.swift; sourceTree = "<group>"; };
-		0DB777392F5D94400090E94F /* DaysOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DaysOne-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,47 +47,75 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0D60FCDE2F6267A10008DFFC /* Onboarding */ = {
+		0D60FD2E2F6280E70008DFFC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				0D60FD072F626AF20008DFFC /* Onboard3View.swift */,
-				0D60FD052F626AE20008DFFC /* Onboard2View.swift */,
-				0D60FD032F626ACC0008DFFC /* Onboard1View.swift */,
-				0D60FD012F626AA90008DFFC /* CustomizePFPView.swift */,
-				0D60FCFD2F626A690008DFFC /* CustomizedProfileView2.swift */,
-				0D60FCFB2F626A500008DFFC /* CustomizedProfileView.swift */,
-				0D60FCF92F626A2E0008DFFC /* SelectedCommunityView.swift */,
-				0D60FCF72F626A190008DFFC /* JoinCommunityView.swift */,
-				0D60FCF52F626A010008DFFC /* BeginCommunitySearchView.swift */,
-				0D60FCF32F6269E60008DFFC /* TermsAndConditionsView.swift */,
-				0D60FCF12F6269BE0008DFFC /* VerifyAccountView.swift */,
-				0D60FCEF2F6269980008DFFC /* CreateAccountView.swift */,
-				0D60FCED2F6269760008DFFC /* WelcomeSignUpView.swift */,
-				0D60FCEB2F62695D0008DFFC /* MeetYourCommunityView.swift */,
+				0D60FD202F6280E70008DFFC /* DaysOne-Regular.ttf */,
+				0D60FD222F6280E70008DFFC /* Inter_18pt-Black.ttf */,
+				0D60FD242F6280E70008DFFC /* Inter_18pt-Bold.ttf */,
+				0D60FD262F6280E70008DFFC /* Inter_18pt-Medium.ttf */,
+				0D60FD282F6280E70008DFFC /* Inter_18pt-Regular.ttf */,
+				0D60FD2A2F6280E70008DFFC /* Jost-Black.ttf */,
+				0D60FD2C2F6280E70008DFFC /* Jost-Bold.ttf */,
 			);
-			path = Onboarding;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
-		0D60FCDF2F6267AF0008DFFC /* Navigation */ = {
+		0D60FD322F6280E70008DFFC /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				0D60FCE72F62689C0008DFFC /* OnboardingCoordinator.swift */,
+				0D60FD302F6280E70008DFFC /* OnboardingCoordinator.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
 		};
-		0D60FCE02F6267B70008DFFC /* Shared */ = {
+		0D60FD502F6280E70008DFFC /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				0D60FCE52F6268780008DFFC /* SharedComponents.swift */,
+				0D60FD342F6280E70008DFFC /* BeginCommunitySearchView.swift */,
+				0D60FD362F6280E70008DFFC /* CreateAccountView.swift */,
+				0D60FD382F6280E70008DFFC /* CustomizedProfileView.swift */,
+				0D60FD3A2F6280E70008DFFC /* CustomizedProfileView2.swift */,
+				0D60FD3C2F6280E70008DFFC /* CustomizePFPView.swift */,
+				0D60FD3E2F6280E70008DFFC /* JoinCommunityView.swift */,
+				0D60FD402F6280E70008DFFC /* MeetYourCommunityView.swift */,
+				0D60FD422F6280E70008DFFC /* Onboard1View.swift */,
+				0D60FD442F6280E70008DFFC /* Onboard2View.swift */,
+				0D60FD462F6280E70008DFFC /* Onboard3View.swift */,
+				0D60FD482F6280E70008DFFC /* SelectedCommunityView.swift */,
+				0D60FD4A2F6280E70008DFFC /* TermsAndConditionsView.swift */,
+				0D60FD4C2F6280E70008DFFC /* VerifyAccountView.swift */,
+				0D60FD4E2F6280E70008DFFC /* WelcomeSignUpView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		0D60FD542F6280E70008DFFC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0D60FD522F6280E70008DFFC /* SharedComponents.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		0D60FD5C2F6280E70008DFFC /* onboarding_remain */ = {
+			isa = PBXGroup;
+			children = (
+				0D60FD2E2F6280E70008DFFC /* Fonts */,
+				0D60FD322F6280E70008DFFC /* Navigation */,
+				0D60FD502F6280E70008DFFC /* Onboarding */,
+				0D60FD542F6280E70008DFFC /* Shared */,
+				0D60FD562F6280E70008DFFC /* Assets.xcassets */,
+				0D60FD582F6280E70008DFFC /* ContentView.swift */,
+				0D60FD5A2F6280E70008DFFC /* onbroading_remainApp.swift */,
+			);
+			path = onboarding_remain;
 			sourceTree = "<group>";
 		};
 		0DB777082F5D89080090E94F = {
 			isa = PBXGroup;
 			children = (
-				0DB777342F5D94230090E94F /* onbroading_remain */,
+				0D60FD5C2F6280E70008DFFC /* onboarding_remain */,
 				0DB777122F5D89080090E94F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,35 +126,6 @@
 				0DB777112F5D89080090E94F /* onbroading_remain.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		0DB777342F5D94230090E94F /* onbroading_remain */ = {
-			isa = PBXGroup;
-			children = (
-				0D60FCE02F6267B70008DFFC /* Shared */,
-				0D60FCDF2F6267AF0008DFFC /* Navigation */,
-				0D60FCDE2F6267A10008DFFC /* Onboarding */,
-				0D8707D32F5FE700007D5BE7 /* onbroading-remain-Info.plist */,
-				0DB777382F5D94280090E94F /* Fonts */,
-				0DB777312F5D94230090E94F /* Assets.xcassets */,
-				0DB777322F5D94230090E94F /* ContentView.swift */,
-				0DB777332F5D94230090E94F /* onbroading_remainApp.swift */,
-			);
-			path = onbroading_remain;
-			sourceTree = "<group>";
-		};
-		0DB777382F5D94280090E94F /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				0D60FCD42F6143BB0008DFFC /* Inter_18pt-Bold.ttf */,
-				0DB777392F5D94400090E94F /* DaysOne-Regular.ttf */,
-				0D8707D42F5FE9A0007D5BE7 /* Jost-Bold.ttf */,
-				0D60FCD22F61430F0008DFFC /* Inter_18pt-Regular.ttf */,
-				0D60FCD82F6201B00008DFFC /* Inter_18pt-Black.ttf */,
-				0D60FCDA2F6201BB0008DFFC /* Jost-Black.ttf */,
-				0D60FCDC2F621DC50008DFFC /* Inter_18pt-Medium.ttf */,
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +165,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0DB7770C2F5D89080090E94F /* Build configuration list for PBXProject "onbroading_remain" */;
+			buildConfigurationList = 0DB7770C2F5D89080090E94F /* Build configuration list for PBXProject "onboarding_remain" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -220,14 +189,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D60FCDB2F6201BB0008DFFC /* Jost-Black.ttf in Resources */,
-				0D8707D52F5FE9A0007D5BE7 /* Jost-Bold.ttf in Resources */,
-				0DB777352F5D94230090E94F /* Assets.xcassets in Resources */,
-				0D60FCD92F6201B00008DFFC /* Inter_18pt-Black.ttf in Resources */,
-				0DB7773A2F5D94400090E94F /* DaysOne-Regular.ttf in Resources */,
-				0D60FCDD2F621DC50008DFFC /* Inter_18pt-Medium.ttf in Resources */,
-				0D60FCD52F6143BB0008DFFC /* Inter_18pt-Bold.ttf in Resources */,
-				0D60FCD32F61430F0008DFFC /* Inter_18pt-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,24 +199,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DB777362F5D94230090E94F /* ContentView.swift in Sources */,
-				0D60FCFE2F626A770008DFFC /* CustomizedProfileView2.swift in Sources */,
-				0D60FCEC2F62696A0008DFFC /* MeetYourCommunityView.swift in Sources */,
-				0D60FCE82F6268AC0008DFFC /* OnboardingCoordinator.swift in Sources */,
-				0D60FD022F626AB20008DFFC /* CustomizePFPView.swift in Sources */,
-				0D60FCF62F626A0C0008DFFC /* BeginCommunitySearchView.swift in Sources */,
-				0D60FCFC2F626A5A0008DFFC /* CustomizedProfileView.swift in Sources */,
-				0D60FCF42F6269EF0008DFFC /* TermsAndConditionsView.swift in Sources */,
-				0D60FD062F626AE70008DFFC /* Onboard2View.swift in Sources */,
-				0D60FD082F626AF90008DFFC /* Onboard3View.swift in Sources */,
-				0D60FCF82F626A220008DFFC /* JoinCommunityView.swift in Sources */,
-				0D60FD042F626AD20008DFFC /* Onboard1View.swift in Sources */,
-				0D60FCF22F6269CA0008DFFC /* VerifyAccountView.swift in Sources */,
-				0D60FCEE2F6269830008DFFC /* WelcomeSignUpView.swift in Sources */,
-				0DB777372F5D94230090E94F /* onbroading_remainApp.swift in Sources */,
-				0D60FCF02F6269A50008DFFC /* CreateAccountView.swift in Sources */,
-				0D60FCE62F6268820008DFFC /* SharedComponents.swift in Sources */,
-				0D60FCFA2F626A380008DFFC /* SelectedCommunityView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +333,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "onbroading-remain-Info.plist";
+				INFOPLIST_FILE = "onboarding-remain-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -422,7 +365,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "onbroading-remain-Info.plist";
+				INFOPLIST_FILE = "onboarding-remain-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -448,7 +391,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0DB7770C2F5D89080090E94F /* Build configuration list for PBXProject "onbroading_remain" */ = {
+		0DB7770C2F5D89080090E94F /* Build configuration list for PBXProject "onboarding_remain" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DB7771A2F5D89090090E94F /* Debug */,
