@@ -6,6 +6,7 @@ const { createDatabaseIfNotExists, initTables } = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const friendRoutes = require("./routes/friendRoutes");
+const feedRoutes = require("./routes/feedRoutes");
 
 const app = express();
 app.use(express.json());
@@ -42,3 +43,4 @@ app.get("/hello", async (req, res) => {
 app.use("/", authRoutes);
 app.use("/account", userRoutes);
 app.use("/friends", friendRoutes);
+app.use("/v1", feedRoutes);

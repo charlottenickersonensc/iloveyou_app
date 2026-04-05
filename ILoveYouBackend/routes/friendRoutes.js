@@ -99,8 +99,9 @@ router.get("/", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         const query = `
-            SELECT u.id, u.username, u.name, u.fruit, u.pronouns
+            SELECT u.id, u.username, u.name, fc.code AS fruit, fc.name AS fruit_name, u.pronouns
             FROM users u
+            JOIN fruit_communities fc ON u.fruit_community_id = fc.id
             JOIN friends f ON (u.id = f.user_id OR u.id = f.friend_id)
             WHERE (f.user_id = $1 OR f.friend_id = $1)
               AND u.id != $1
@@ -121,8 +122,9 @@ router.get("/requests", authenticateToken, async (req, res) => {
         const userId = req.user.id;
 
         const query = `
-            SELECT u.id, u.username, u.name, u.fruit, f.created_at
+            SELECT u.id, u.username, u.name, fc.code AS fruit, fc.name AS fruit_name, f.created_at
             FROM users u
+            JOIN fruit_communities fc ON u.fruit_community_id = fc.id
             JOIN friends f ON u.id = f.user_id
             WHERE f.friend_id = $1
               AND f.status = 'pending'
