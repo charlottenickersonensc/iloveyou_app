@@ -123,6 +123,20 @@ describe("feed service", () => {
     expect(likedAgain).toEqual({liked: true, likeCount: 1});
   });
 
+  it("creates a like notification for the post author", async () => {
+    const post = (await createPostForUid("apple_user", {contentText: "Notify like"})).post;
+    await seedUser("apple_friend", "apple");
+
+    await togglePostLikeForUid("apple_friend", {postId: post.id});
+
+    const notifications = await getFirestore().collection("notifications")
+      .where("userId", "==", "apple_user")
+      .where("type", "==", "like")
+      .get();
+    expect(notifications.size).toBe(1);
+    expect(notifications.docs[0].data().fruitCommunityId).toBe("apple");
+  });
+
   it("creates same-fruit comments and rejects empty, blocked, and cross-fruit comments", async () => {
     const post = (await createPostForUid("apple_user", {contentText: "Commentable"})).post;
 
@@ -141,6 +155,23 @@ describe("feed service", () => {
 
     const savedPost = await getFirestore().collection("posts").doc(post.id).get();
     expect(savedPost.data()?.commentCount).toBe(1);
+  });
+
+  it("creates a comment notification for the post author", async () => {
+    const post = (await createPostForUid("apple_user", {contentText: "Notify comment"})).post;
+    await seedUser("apple_friend", "apple");
+
+    await createCommentForUid("apple_friend", {
+      postId: post.id,
+      contentText: "Notification comment"
+    });
+
+    const notifications = await getFirestore().collection("notifications")
+      .where("userId", "==", "apple_user")
+      .where("type", "==", "comment")
+      .get();
+    expect(notifications.size).toBe(1);
+    expect(notifications.docs[0].data().fruitCommunityId).toBe("apple");
   });
 
   it("reports posts once per reporter and rejects cross-fruit reports", async () => {

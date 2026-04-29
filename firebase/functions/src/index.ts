@@ -8,6 +8,10 @@ import {
   reportContentForUid,
   togglePostLikeForUid
 } from "./services/feedService";
+import {
+  respondToFriendRequestForUid,
+  sendFriendRequestForUid
+} from "./services/socialService";
 import {assertAuth} from "./utils/assertAuth";
 
 initializeApp();
@@ -40,4 +44,14 @@ export const createComment = onCall(async (request) => {
 export const reportContent = onCall(async (request) => {
   const uid = assertAuth(request.auth);
   return reportContentForUid(uid, request.data);
+});
+
+export const sendFriendRequest = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return sendFriendRequestForUid(uid, request.data);
+});
+
+export const respondToFriendRequest = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return respondToFriendRequestForUid(uid, request.data);
 });

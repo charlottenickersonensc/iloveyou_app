@@ -1,6 +1,7 @@
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
 import {failedPrecondition, invalidArgument, notFound} from "../utils/errors";
 import {postLikesRef, postsRef, reportsRef, usersRef, firestore} from "../utils/firestoreRefs";
+import {buildNotification, notificationRef} from "../utils/notifications";
 import {
   assertNoProtectedPostInput,
   validateContentText,
@@ -133,6 +134,19 @@ export async function togglePostLikeForUid(
       fruitCommunityId: user.fruitCommunityId,
       createdAt: FieldValue.serverTimestamp()
     });
+    if (post.authorId !== uid) {
+      const ref = notificationRef();
+      transaction.set(ref, buildNotification(ref.id, {
+        userId: post.authorId,
+        actorId: uid,
+        type: "like",
+        entityType: "post",
+        entityId: postId,
+        fruitCommunityId: user.fruitCommunityId,
+        title: "New like",
+        body: `${user.displayUsername} liked your post.`
+      }));
+    }
     transaction.update(postRef, {
       likeCount,
       updatedAt: FieldValue.serverTimestamp()
@@ -152,7 +166,7 @@ export async function createCommentForUid(uid: string, input: CreateCommentInput
 
   return firestore().runTransaction(async (transaction) => {
     const postSnapshot = await transaction.get(postRef);
-    requireSameFruitPost(postSnapshot, user.fruitCommunityId);
+    const post = requireSameFruitPost(postSnapshot, user.fruitCommunityId);
     const comment: AppComment = {
       id: commentRef.id,
       postId,
@@ -167,6 +181,19 @@ export async function createCommentForUid(uid: string, input: CreateCommentInput
       deletedAt: null
     };
     transaction.set(commentRef, comment);
+    if (post.authorId !== uid) {
+      const ref = notificationRef();
+      transaction.set(ref, buildNotification(ref.id, {
+        userId: post.authorId,
+        actorId: uid,
+        type: "comment",
+        entityType: "post",
+        entityId: postId,
+        fruitCommunityId: user.fruitCommunityId,
+        title: "New comment",
+        body: `${user.displayUsername} commented on your post.`
+      }));
+    }
     transaction.update(postRef, {
       commentCount: FieldValue.increment(1),
       updatedAt: FieldValue.serverTimestamp()

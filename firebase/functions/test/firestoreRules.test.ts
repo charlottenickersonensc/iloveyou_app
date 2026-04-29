@@ -65,6 +65,20 @@ describe("Firestore fruit immutability rules", () => {
         updatedAt: serverTimestamp(),
         profileCompleted: false
       });
+      await setDoc(doc(db, "users/carol"), {
+        id: "carol",
+        email: "carol@example.com",
+        username: "carol",
+        displayUsername: "Carol",
+        fruitCommunityId: "apple",
+        fruitCode: "apple",
+        role: "user",
+        isCaptain: false,
+        createdAt: serverTimestamp(),
+        memberSince: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        profileCompleted: false
+      });
       await setDoc(doc(db, "posts/apple_post"), {
         id: "apple_post",
         authorId: "alice",
@@ -123,6 +137,33 @@ describe("Firestore fruit immutability rules", () => {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         deletedAt: null
+      });
+      await setDoc(doc(db, "friendships/alice_carol"), {
+        id: "alice_carol",
+        userLowId: "alice",
+        userHighId: "carol",
+        requesterId: "alice",
+        receiverId: "carol",
+        participantIds: ["alice", "carol"],
+        fruitCommunityId: "apple",
+        status: "pending",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        acceptedAt: null,
+        blockedAt: null
+      });
+      await setDoc(doc(db, "notifications/note_1"), {
+        id: "note_1",
+        userId: "alice",
+        actorId: "carol",
+        type: "friend_request",
+        entityType: "friendship",
+        entityId: "alice_carol",
+        fruitCommunityId: "apple",
+        title: "New friend request",
+        body: "Carol sent you a friend request.",
+        isRead: false,
+        createdAt: serverTimestamp()
       });
     });
   });
@@ -246,6 +287,37 @@ describe("Firestore fruit immutability rules", () => {
       contentText: "Wrong fruit",
       visibility: "fruit",
       deletedAt: null
+    }));
+  });
+
+  it("allows participant friendship reads and rejects direct friendship writes", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+    const carolDb = testEnv.authenticatedContext("carol").firestore();
+
+    await assertSucceeds(getDoc(doc(aliceDb, "friendships/alice_carol")));
+    await assertSucceeds(getDoc(doc(carolDb, "friendships/alice_carol")));
+    await assertFails(setDoc(doc(aliceDb, "friendships/alice_new"), {
+      id: "alice_new",
+      requesterId: "alice",
+      receiverId: "new",
+      participantIds: ["alice", "new"],
+      fruitCommunityId: "apple",
+      status: "pending"
+    }));
+  });
+
+  it("allows own notification reads and rejects direct notification writes", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+    const bobDb = testEnv.authenticatedContext("bob").firestore();
+
+    await assertSucceeds(getDoc(doc(aliceDb, "notifications/note_1")));
+    await assertFails(getDoc(doc(bobDb, "notifications/note_1")));
+    await assertFails(setDoc(doc(aliceDb, "notifications/client_note"), {
+      id: "client_note",
+      userId: "alice",
+      actorId: "bob",
+      type: "friend_request",
+      fruitCommunityId: "apple"
     }));
   });
 
