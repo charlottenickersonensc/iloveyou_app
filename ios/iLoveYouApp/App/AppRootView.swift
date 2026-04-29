@@ -25,10 +25,23 @@ public struct AppRootView: View {
             case .needsFruitReveal(let user):
                 FruitRevealView(viewModel: FruitRevealViewModel(user: user))
             case .signedIn(let user):
-                ProfileView(viewModel: ProfileViewModel(
-                    user: user,
-                    profileRepository: authStateStore.profileRepository
-                ))
+                TabView {
+                    FeedView(viewModel: FeedViewModel(
+                        currentUser: user,
+                        feedRepository: authStateStore.feedRepository
+                    ))
+                    .tabItem {
+                        Label("Feed", systemImage: "text.bubble")
+                    }
+
+                    ProfileView(viewModel: ProfileViewModel(
+                        user: user,
+                        profileRepository: authStateStore.profileRepository
+                    ))
+                    .tabItem {
+                        Label("Profile", systemImage: "person")
+                    }
+                }
             }
         }
     }

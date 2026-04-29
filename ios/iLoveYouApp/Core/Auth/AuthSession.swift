@@ -72,3 +72,70 @@ public protocol ProfileRepository {
     func updateProfile(input: UpdateProfileInput) async throws -> User
     func fetchFruit(id: String) async throws -> FruitCommunity
 }
+
+public struct FeedPage {
+    public let posts: [Post]
+    public let nextCursor: Any?
+    public let hasMore: Bool
+
+    public init(posts: [Post], nextCursor: Any?, hasMore: Bool) {
+        self.posts = posts
+        self.nextCursor = nextCursor
+        self.hasMore = hasMore
+    }
+}
+
+public struct CreatePostInput: Equatable {
+    public var contentText: String
+    public var imageUrls: [URL]
+
+    public init(contentText: String, imageUrls: [URL] = []) {
+        self.contentText = contentText
+        self.imageUrls = imageUrls
+    }
+}
+
+public struct ReportContentInput: Equatable {
+    public var targetType: String
+    public var targetId: String
+    public var reason: ReportReason
+    public var details: String?
+
+    public init(targetType: String = "post", targetId: String, reason: ReportReason, details: String? = nil) {
+        self.targetType = targetType
+        self.targetId = targetId
+        self.reason = reason
+        self.details = details
+    }
+}
+
+public enum ReportReason: String, CaseIterable, Codable, Equatable {
+    case harassment
+    case hate
+    case selfHarm = "self_harm"
+    case sexualContent = "sexual_content"
+    case spam
+    case violence
+    case other
+
+    public var displayTitle: String {
+        switch self {
+        case .harassment: return "Harassment"
+        case .hate: return "Hate"
+        case .selfHarm: return "Self-harm"
+        case .sexualContent: return "Sexual content"
+        case .spam: return "Spam"
+        case .violence: return "Violence"
+        case .other: return "Other"
+        }
+    }
+}
+
+public protocol FeedRepository {
+    func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage
+    func createPost(input: CreatePostInput) async throws -> Post
+    func uploadPostImages(_ images: [PostImageUpload], draftPostId: String) async throws -> [URL]
+    func toggleLike(postId: String) async throws -> LikeResult
+    func createComment(postId: String, contentText: String) async throws -> PostComment
+    func reportContent(input: ReportContentInput) async throws
+}

@@ -40,6 +40,13 @@
 		A1B2C3D4000000000000021F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011F /* ProfileView.swift */; };
 		A1B2C3D40000000000000220 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000120 /* ProfileViewModel.swift */; };
 		A1B2C3D40000000000000221 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000121 /* Assets.xcassets */; };
+		A1B2C3D40000000000000222 /* FirebaseFeedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000122 /* FirebaseFeedRepository.swift */; };
+		A1B2C3D40000000000000223 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000123 /* FeedViewModel.swift */; };
+		A1B2C3D40000000000000224 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000124 /* FeedView.swift */; };
+		A1B2C3D40000000000000225 /* PostCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000125 /* PostCardView.swift */; };
+		A1B2C3D40000000000000226 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000126 /* CreatePostView.swift */; };
+		A1B2C3D40000000000000227 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000127 /* PostDetailView.swift */; };
+		A1B2C3D40000000000000228 /* ReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000128 /* ReportContentView.swift */; };
 		A1B2C3D40000000000000401 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000301 /* FirebaseAuth */; };
 		A1B2C3D40000000000000402 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000302 /* FirebaseFirestore */; };
 		A1B2C3D40000000000000403 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000303 /* FirebaseFunctions */; };
@@ -84,6 +91,13 @@
 		A1B2C3D4000000000000011F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileView.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000120 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileViewModel.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000121 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D40000000000000122 /* FirebaseFeedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/FirebaseFeedRepository.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000123 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/FeedViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000124 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/FeedView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000125 /* PostCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/PostCardView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000126 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/CreatePostView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000127 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/PostDetailView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000128 /* ReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/ReportContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +162,13 @@
 				A1B2C3D4000000000000011F /* ProfileView.swift */,
 				A1B2C3D40000000000000120 /* ProfileViewModel.swift */,
 				A1B2C3D40000000000000121 /* Assets.xcassets */,
+				A1B2C3D40000000000000122 /* FirebaseFeedRepository.swift */,
+				A1B2C3D40000000000000123 /* FeedViewModel.swift */,
+				A1B2C3D40000000000000124 /* FeedView.swift */,
+				A1B2C3D40000000000000125 /* PostCardView.swift */,
+				A1B2C3D40000000000000126 /* CreatePostView.swift */,
+				A1B2C3D40000000000000127 /* PostDetailView.swift */,
+				A1B2C3D40000000000000128 /* ReportContentView.swift */,
 			);
 			path = iLoveYouApp;
 			sourceTree = "<group>";
@@ -275,6 +296,13 @@
 				A1B2C3D4000000000000021E /* ProfileCreationViewModel.swift in Sources */,
 				A1B2C3D4000000000000021F /* ProfileView.swift in Sources */,
 				A1B2C3D40000000000000220 /* ProfileViewModel.swift in Sources */,
+				A1B2C3D40000000000000222 /* FirebaseFeedRepository.swift in Sources */,
+				A1B2C3D40000000000000223 /* FeedViewModel.swift in Sources */,
+				A1B2C3D40000000000000224 /* FeedView.swift in Sources */,
+				A1B2C3D40000000000000225 /* PostCardView.swift in Sources */,
+				A1B2C3D40000000000000226 /* CreatePostView.swift in Sources */,
+				A1B2C3D40000000000000227 /* PostDetailView.swift in Sources */,
+				A1B2C3D40000000000000228 /* ReportContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

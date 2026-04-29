@@ -22,6 +22,12 @@ service cloud.firestore {
       return isSignedIn() && currentUserDoc().data.fruitCommunityId == fruitCommunityId;
     }
 
+    function isReadableFruitPost(postData) {
+      return isSameFruit(postData.fruitCommunityId)
+        && postData.visibility == "fruit"
+        && postData.deletedAt == null;
+    }
+
     function isAdmin() {
       return isSignedIn() && request.auth.token.role == "platformAdmin";
     }
@@ -71,11 +77,13 @@ service cloud.firestore {
     }
 
     match /posts/{postId} {
-      allow read: if isSameFruit(resource.data.fruitCommunityId) && resource.data.deletedAt == null;
+      allow read: if isReadableFruitPost(resource.data);
       allow write: if false;
 
       match /comments/{commentId} {
-        allow read: if isSameFruit(resource.data.fruitCommunityId);
+        allow read: if isReadableFruitPost(get(/databases/$(database)/documents/posts/$(postId)).data)
+          && isSameFruit(resource.data.fruitCommunityId)
+          && resource.data.deletedAt == null;
         allow write: if false;
       }
     }

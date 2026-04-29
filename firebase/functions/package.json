@@ -11,7 +11,7 @@
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
     "seed:fruits": "tsx src/scripts/seedFruitCommunities.ts",
     "test": "jest --runInBand",
-    "test:emulators": "cd .. && firebase emulators:exec --only auth,firestore \"cd functions && npm test\""
+    "test:emulators": "cd .. && firebase emulators:exec --only auth,firestore,storage \"cd functions && npm test\""
   },
   "dependencies": {
     "firebase-admin": "^12.7.0",
