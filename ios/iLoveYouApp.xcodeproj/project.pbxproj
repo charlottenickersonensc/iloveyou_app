@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D40000000000000201 /* iLoveYouApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000101 /* iLoveYouApp.swift */; };
+		A1B2C3D40000000000000202 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000102 /* AppRootView.swift */; };
+		A1B2C3D40000000000000203 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000103 /* AppRouter.swift */; };
+		A1B2C3D40000000000000204 /* FirebaseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000104 /* FirebaseBootstrap.swift */; };
+		A1B2C3D40000000000000205 /* CallableFunctionsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000105 /* CallableFunctionsClient.swift */; };
+		A1B2C3D40000000000000206 /* AppleSignInCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000106 /* AppleSignInCoordinator.swift */; };
+		A1B2C3D40000000000000207 /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000107 /* AuthSession.swift */; };
+		A1B2C3D40000000000000208 /* AuthStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000108 /* AuthStateStore.swift */; };
+		A1B2C3D40000000000000209 /* FirebaseAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000109 /* FirebaseAuthRepository.swift */; };
+		A1B2C3D4000000000000020A /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010A /* AppButton.swift */; };
+		A1B2C3D4000000000000020B /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010B /* AppTextField.swift */; };
+		A1B2C3D4000000000000020C /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010C /* DesignTokens.swift */; };
+		A1B2C3D4000000000000020D /* FruitTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010D /* FruitTheme.swift */; };
+		A1B2C3D4000000000000020E /* Friendship.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010E /* Friendship.swift */; };
+		A1B2C3D4000000000000020F /* FruitCommunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000010F /* FruitCommunity.swift */; };
+		A1B2C3D40000000000000210 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000110 /* NotificationItem.swift */; };
+		A1B2C3D40000000000000211 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000111 /* Post.swift */; };
+		A1B2C3D40000000000000212 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000112 /* User.swift */; };
+		A1B2C3D40000000000000213 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000113 /* AppRoute.swift */; };
+		A1B2C3D40000000000000214 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000114 /* PushNotificationManager.swift */; };
+		A1B2C3D40000000000000215 /* ImageUploadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000115 /* ImageUploadService.swift */; };
+		A1B2C3D40000000000000216 /* FruitWheelCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000116 /* FruitWheelCalculator.swift */; };
+		A1B2C3D40000000000000217 /* SignupValidators.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000117 /* SignupValidators.swift */; };
+		A1B2C3D40000000000000218 /* EmailAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000118 /* EmailAuthView.swift */; };
+		A1B2C3D40000000000000219 /* EmailAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000119 /* EmailAuthViewModel.swift */; };
+		A1B2C3D4000000000000021A /* FruitRevealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011A /* FruitRevealView.swift */; };
+		A1B2C3D4000000000000021B /* FruitRevealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011B /* FruitRevealViewModel.swift */; };
+		A1B2C3D4000000000000021C /* FruitWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011C /* FruitWheelView.swift */; };
+		A1B2C3D4000000000000021D /* ProfileCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011D /* ProfileCreationView.swift */; };
+		A1B2C3D4000000000000021E /* ProfileCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011E /* ProfileCreationViewModel.swift */; };
+		A1B2C3D4000000000000021F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000011F /* ProfileView.swift */; };
+		A1B2C3D40000000000000220 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000120 /* ProfileViewModel.swift */; };
+		A1B2C3D40000000000000221 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000121 /* Assets.xcassets */; };
+		A1B2C3D40000000000000401 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000301 /* FirebaseAuth */; };
+		A1B2C3D40000000000000402 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000302 /* FirebaseFirestore */; };
+		A1B2C3D40000000000000403 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000303 /* FirebaseFunctions */; };
+		A1B2C3D40000000000000404 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000304 /* FirebaseStorage */; };
+		A1B2C3D40000000000000405 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000305 /* FirebaseMessaging */; };
+		A1B2C3D40000000000000406 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000306 /* FirebaseCrashlytics */; };
+		A1B2C3D40000000000000407 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000307 /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D40000000000000006 /* iLoveYouApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iLoveYouApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D40000000000000101 /* iLoveYouApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/iLoveYouApp.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000102 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/AppRootView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000103 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/AppRouter.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000104 /* FirebaseBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/FirebaseBootstrap.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000105 /* CallableFunctionsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/API/CallableFunctionsClient.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000106 /* AppleSignInCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Auth/AppleSignInCoordinator.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000107 /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Auth/AuthSession.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000108 /* AuthStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Auth/AuthStateStore.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000109 /* FirebaseAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Auth/FirebaseAuthRepository.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010A /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/DesignSystem/AppButton.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010B /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/DesignSystem/AppTextField.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010C /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/DesignSystem/DesignTokens.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010D /* FruitTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/DesignSystem/FruitTheme.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010E /* Friendship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Models/Friendship.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000010F /* FruitCommunity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Models/FruitCommunity.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000110 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Models/NotificationItem.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000111 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Models/Post.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000112 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Models/User.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000113 /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Navigation/AppRoute.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000114 /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Notifications/PushNotificationManager.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000115 /* ImageUploadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Storage/ImageUploadService.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000116 /* FruitWheelCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Utilities/FruitWheelCalculator.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000117 /* SignupValidators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core/Utilities/SignupValidators.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000118 /* EmailAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/EmailAuthView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000119 /* EmailAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/EmailAuthViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011A /* FruitRevealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/FruitRevealView.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011B /* FruitRevealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/FruitRevealViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011C /* FruitWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/FruitWheelView.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011D /* ProfileCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileCreationView.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011E /* ProfileCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileCreationViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000011F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000120 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Profile/ProfileViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000121 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D40000000000000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D40000000000000401 /* FirebaseAuth in Frameworks */,
+				A1B2C3D40000000000000402 /* FirebaseFirestore in Frameworks */,
+				A1B2C3D40000000000000403 /* FirebaseFunctions in Frameworks */,
+				A1B2C3D40000000000000404 /* FirebaseStorage in Frameworks */,
+				A1B2C3D40000000000000405 /* FirebaseMessaging in Frameworks */,
+				A1B2C3D40000000000000406 /* FirebaseCrashlytics in Frameworks */,
+				A1B2C3D40000000000000407 /* FirebaseAnalytics in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D40000000000000003 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40000000000000004 /* iLoveYouApp */,
+				A1B2C3D40000000000000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D40000000000000004 /* iLoveYouApp */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40000000000000101 /* iLoveYouApp.swift */,
+				A1B2C3D40000000000000102 /* AppRootView.swift */,
+				A1B2C3D40000000000000103 /* AppRouter.swift */,
+				A1B2C3D40000000000000104 /* FirebaseBootstrap.swift */,
+				A1B2C3D40000000000000105 /* CallableFunctionsClient.swift */,
+				A1B2C3D40000000000000106 /* AppleSignInCoordinator.swift */,
+				A1B2C3D40000000000000107 /* AuthSession.swift */,
+				A1B2C3D40000000000000108 /* AuthStateStore.swift */,
+				A1B2C3D40000000000000109 /* FirebaseAuthRepository.swift */,
+				A1B2C3D4000000000000010A /* AppButton.swift */,
+				A1B2C3D4000000000000010B /* AppTextField.swift */,
+				A1B2C3D4000000000000010C /* DesignTokens.swift */,
+				A1B2C3D4000000000000010D /* FruitTheme.swift */,
+				A1B2C3D4000000000000010E /* Friendship.swift */,
+				A1B2C3D4000000000000010F /* FruitCommunity.swift */,
+				A1B2C3D40000000000000110 /* NotificationItem.swift */,
+				A1B2C3D40000000000000111 /* Post.swift */,
+				A1B2C3D40000000000000112 /* User.swift */,
+				A1B2C3D40000000000000113 /* AppRoute.swift */,
+				A1B2C3D40000000000000114 /* PushNotificationManager.swift */,
+				A1B2C3D40000000000000115 /* ImageUploadService.swift */,
+				A1B2C3D40000000000000116 /* FruitWheelCalculator.swift */,
+				A1B2C3D40000000000000117 /* SignupValidators.swift */,
+				A1B2C3D40000000000000118 /* EmailAuthView.swift */,
+				A1B2C3D40000000000000119 /* EmailAuthViewModel.swift */,
+				A1B2C3D4000000000000011A /* FruitRevealView.swift */,
+				A1B2C3D4000000000000011B /* FruitRevealViewModel.swift */,
+				A1B2C3D4000000000000011C /* FruitWheelView.swift */,
+				A1B2C3D4000000000000011D /* ProfileCreationView.swift */,
+				A1B2C3D4000000000000011E /* ProfileCreationViewModel.swift */,
+				A1B2C3D4000000000000011F /* ProfileView.swift */,
+				A1B2C3D40000000000000120 /* ProfileViewModel.swift */,
+				A1B2C3D40000000000000121 /* Assets.xcassets */,
+			);
+			path = iLoveYouApp;
+			sourceTree = "<group>";
+		};
+		A1B2C3D40000000000000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D40000000000000006 /* iLoveYouApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D40000000000000001 /* iLoveYouApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D40000000000000503 /* Build configuration list for PBXNativeTarget "iLoveYouApp" */;
+			buildPhases = (
+				A1B2C3D40000000000000007 /* Sources */,
+				A1B2C3D40000000000000009 /* Frameworks */,
+				A1B2C3D40000000000000008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iLoveYouApp;
+			packageProductDependencies = (
+				A1B2C3D40000000000000301 /* FirebaseAuth */,
+				A1B2C3D40000000000000302 /* FirebaseFirestore */,
+				A1B2C3D40000000000000303 /* FirebaseFunctions */,
+				A1B2C3D40000000000000304 /* FirebaseStorage */,
+				A1B2C3D40000000000000305 /* FirebaseMessaging */,
+				A1B2C3D40000000000000306 /* FirebaseCrashlytics */,
+				A1B2C3D40000000000000307 /* FirebaseAnalytics */,
+			);
+			productName = iLoveYouApp;
+			productReference = A1B2C3D40000000000000006 /* iLoveYouApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D40000000000000002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					A1B2C3D40000000000000001 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D40000000000000500 /* Build configuration list for PBXProject "iLoveYouApp" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1B2C3D40000000000000003;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 60;
+			productRefGroup = A1B2C3D40000000000000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D40000000000000001 /* iLoveYouApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D40000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D40000000000000221 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D40000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D40000000000000201 /* iLoveYouApp.swift in Sources */,
+				A1B2C3D40000000000000202 /* AppRootView.swift in Sources */,
+				A1B2C3D40000000000000203 /* AppRouter.swift in Sources */,
+				A1B2C3D40000000000000204 /* FirebaseBootstrap.swift in Sources */,
+				A1B2C3D40000000000000205 /* CallableFunctionsClient.swift in Sources */,
+				A1B2C3D40000000000000206 /* AppleSignInCoordinator.swift in Sources */,
+				A1B2C3D40000000000000207 /* AuthSession.swift in Sources */,
+				A1B2C3D40000000000000208 /* AuthStateStore.swift in Sources */,
+				A1B2C3D40000000000000209 /* FirebaseAuthRepository.swift in Sources */,
+				A1B2C3D4000000000000020A /* AppButton.swift in Sources */,
+				A1B2C3D4000000000000020B /* AppTextField.swift in Sources */,
+				A1B2C3D4000000000000020C /* DesignTokens.swift in Sources */,
+				A1B2C3D4000000000000020D /* FruitTheme.swift in Sources */,
+				A1B2C3D4000000000000020E /* Friendship.swift in Sources */,
+				A1B2C3D4000000000000020F /* FruitCommunity.swift in Sources */,
+				A1B2C3D40000000000000210 /* NotificationItem.swift in Sources */,
+				A1B2C3D40000000000000211 /* Post.swift in Sources */,
+				A1B2C3D40000000000000212 /* User.swift in Sources */,
+				A1B2C3D40000000000000213 /* AppRoute.swift in Sources */,
+				A1B2C3D40000000000000214 /* PushNotificationManager.swift in Sources */,
+				A1B2C3D40000000000000215 /* ImageUploadService.swift in Sources */,
+				A1B2C3D40000000000000216 /* FruitWheelCalculator.swift in Sources */,
+				A1B2C3D40000000000000217 /* SignupValidators.swift in Sources */,
+				A1B2C3D40000000000000218 /* EmailAuthView.swift in Sources */,
+				A1B2C3D40000000000000219 /* EmailAuthViewModel.swift in Sources */,
+				A1B2C3D4000000000000021A /* FruitRevealView.swift in Sources */,
+				A1B2C3D4000000000000021B /* FruitRevealViewModel.swift in Sources */,
+				A1B2C3D4000000000000021C /* FruitWheelView.swift in Sources */,
+				A1B2C3D4000000000000021D /* ProfileCreationView.swift in Sources */,
+				A1B2C3D4000000000000021E /* ProfileCreationViewModel.swift in Sources */,
+				A1B2C3D4000000000000021F /* ProfileView.swift in Sources */,
+				A1B2C3D40000000000000220 /* ProfileViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3D40000000000000501 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A1B2C3D40000000000000502 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A1B2C3D40000000000000504 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = iLoveYou;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
+					UIInterfaceOrientationPortrait,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.iloveyou.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A1B2C3D40000000000000505 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = iLoveYou;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
+					UIInterfaceOrientationPortrait,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.iloveyou.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3D40000000000000500 /* Build configuration list for PBXProject "iLoveYouApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D40000000000000501 /* Debug */,
+				A1B2C3D40000000000000502 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D40000000000000503 /* Build configuration list for PBXNativeTarget "iLoveYouApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D40000000000000504 /* Debug */,
+				A1B2C3D40000000000000505 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A1B2C3D40000000000000301 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		A1B2C3D40000000000000302 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		A1B2C3D40000000000000303 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		A1B2C3D40000000000000304 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		A1B2C3D40000000000000305 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		A1B2C3D40000000000000306 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		A1B2C3D40000000000000307 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D40000000000000300 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A1B2C3D40000000000000002 /* Project object */;
+}

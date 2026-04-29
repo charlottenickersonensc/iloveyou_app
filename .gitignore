@@ -1,0 +1,15 @@
+.DS_Store
+
+# Node / Firebase Functions
+firebase/functions/node_modules/
+firebase/functions/lib/
+firebase/firestore-debug.log
+firebase/ui-debug.log
+firebase/database-debug.log
+
+# Swift Package / Xcode
+ios/.build/
+ios/DerivedData/
+ios/iLoveYouApp.xcodeproj/xcuserdata/
+ios/iLoveYouApp.xcworkspace/xcuserdata/
+ios/iLoveYouApp/Resources/GoogleService-Info.plist

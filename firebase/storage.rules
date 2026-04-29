@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isImageUnder(sizeLimit) {
+      return request.resource != null
+        && request.resource.size < sizeLimit
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    match /avatars/{uid}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(uid) && isImageUnder(5 * 1024 * 1024);
+    }
+
+    match /postImages/{uid}/{postId}/{fileName} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(uid) && isImageUnder(10 * 1024 * 1024);
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

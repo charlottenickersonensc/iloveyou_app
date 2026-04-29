@@ -1,0 +1,151 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function currentUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function currentUserFruit() {
+      return currentUserDoc().data.fruitCommunityId;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isSameFruit(fruitCommunityId) {
+      return isSignedIn() && currentUserDoc().data.fruitCommunityId == fruitCommunityId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == "platformAdmin";
+    }
+
+    function onlyAllowedUserProfileFields() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "displayUsername",
+        "pronouns",
+        "locationText",
+        "bio",
+        "avatarUrl",
+        "interests",
+        "isPrivate",
+        "profileCompleted",
+        "updatedAt",
+        "lastActiveAt",
+        "fcmTokens"
+      ]);
+    }
+
+    function immutableFruit() {
+      return request.resource.data.fruitCommunityId == resource.data.fruitCommunityId
+        && request.resource.data.fruitCode == resource.data.fruitCode;
+    }
+
+    match /fruitCommunities/{fruitId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isSameFruit(resource.data.fruitCommunityId);
+      allow update: if isSelf(uid)
+        && immutableFruit()
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.isCaptain == resource.data.isCaptain
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.memberSince == resource.data.memberSince
+        && onlyAllowedUserProfileFields();
+      allow create, delete: if false;
+    }
+
+    match /usernames/{usernameLower} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /posts/{postId} {
+      allow read: if isSameFruit(resource.data.fruitCommunityId) && resource.data.deletedAt == null;
+      allow write: if false;
+
+      match /comments/{commentId} {
+        allow read: if isSameFruit(resource.data.fruitCommunityId);
+        allow write: if false;
+      }
+    }
+
+    match /postLikes/{likeId} {
+      allow read: if isSameFruit(resource.data.fruitCommunityId);
+      allow write: if false;
+    }
+
+    match /friendships/{friendshipId} {
+      allow read: if isSignedIn() && request.auth.uid in resource.data.participantIds;
+      allow write: if false;
+    }
+
+    match /groups/{groupId} {
+      allow read: if isSameFruit(resource.data.fruitCommunityId);
+      allow write: if false;
+    }
+
+    match /groupMemberships/{membershipId} {
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isSameFruit(resource.data.fruitCommunityId));
+      allow write: if false;
+    }
+
+    match /events/{eventId} {
+      allow read: if isSameFruit(resource.data.fruitCommunityId);
+      allow write: if false;
+    }
+
+    match /eventRegistrations/{registrationId} {
+      allow read: if isSignedIn()
+        && (resource.data.userId == request.auth.uid || isSameFruit(resource.data.fruitCommunityId));
+      allow write: if false;
+    }
+
+    match /conversations/{conversationId} {
+      allow read: if isSignedIn()
+        && isSameFruit(resource.data.fruitCommunityId)
+        && (resource.data.type != "dm" || request.auth.uid in resource.data.participantIds);
+      allow write: if false;
+
+      match /messages/{messageId} {
+        allow read: if isSameFruit(resource.data.fruitCommunityId);
+        allow write: if false;
+      }
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    match /reports/{reportId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.reporterId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /moodCheckins/{checkinId} {
+      allow read, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /dailyAffirmations/{dateId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /blockedWords/{wordId} {
+      allow read, write: if false;
+    }
+  }
+}

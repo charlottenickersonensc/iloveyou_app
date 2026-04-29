@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "iloveyou-dev",
+    "dev": "iloveyou-dev",
+    "staging": "iloveyou-staging",
+    "prod": "iloveyou-prod"
+  }
+}
