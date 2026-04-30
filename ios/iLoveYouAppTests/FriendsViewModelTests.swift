@@ -25,6 +25,26 @@ final class FeedViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func testInitialLoadIgnoresDuplicateInFlightRequest() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let fruitPost = TestFeedData.post(id: "fruit-post", fruitCommunityId: currentUser.fruitCommunityId)
+        let repository = MockFeedRepository()
+        repository.fetchDelayNanos = 50_000_000
+        repository.fruitPages = [
+            FeedPage(posts: [fruitPost], nextCursor: nil, hasMore: false)
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository, pageSize: 10)
+
+        async let firstLoad: Void = viewModel.loadInitial()
+        async let duplicateLoad: Void = viewModel.loadInitial()
+        _ = await (firstLoad, duplicateLoad)
+
+        XCTAssertEqual(repository.fruitFetches.count, 1)
+        XCTAssertEqual(viewModel.posts, [fruitPost])
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    @MainActor
     func testSelectingTrendingLoadsTrendingFeedAndClearsFruitPosts() async {
         let currentUser = TestSocialData.user(id: "uid-current", username: "current")
         let fruitPost = TestFeedData.post(id: "fruit-post", fruitCommunityId: currentUser.fruitCommunityId)
@@ -472,8 +492,12 @@ private final class MockFeedRepository: FeedRepository {
     var createPostInputs: [CreatePostInput] = []
     var pinRequests: [RecordedPinRequest] = []
     var pinResults: [Post] = []
+    var fetchDelayNanos: UInt64 = 0
 
     func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage {
+        if fetchDelayNanos > 0 {
+            try await Task.sleep(nanoseconds: fetchDelayNanos)
+        }
         fruitFetches.append(RecordedFeedFetch(
             userId: currentUser.id,
             fruitCommunityId: currentUser.fruitCommunityId,

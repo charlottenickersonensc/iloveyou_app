@@ -25,13 +25,14 @@ public struct FeedView: View {
                 .listRowSeparator(.hidden)
 
                 if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
+                    FeedLoadingRow(title: viewModel.feedMode.loadingTitle)
+                        .listRowSeparator(.hidden)
                 } else if viewModel.posts.isEmpty {
-                    ContentUnavailableView(
-                        viewModel.feedMode.emptyTitle,
-                        systemImage: "text.bubble",
-                        description: Text(viewModel.feedMode.emptyDescription)
+                    FeedEmptyState(
+                        title: viewModel.feedMode.emptyTitle,
+                        message: viewModel.feedMode.emptyDescription,
+                        showsCreateAction: viewModel.feedMode == .fruit,
+                        onCreatePost: { isShowingComposer = true }
                     )
                     .listRowSeparator(.hidden)
                 } else {
@@ -52,8 +53,8 @@ public struct FeedView: View {
                     }
 
                     if viewModel.isLoadingMore {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
+                        FeedLoadingRow(title: "Loading more posts")
+                            .listRowSeparator(.hidden)
                     }
                 }
             }
@@ -71,6 +72,7 @@ public struct FeedView: View {
                         Image(systemName: "square.and.pencil")
                     }
                     .accessibilityLabel("Create post")
+                    .accessibilityHint("Opens the post composer.")
                 }
             }
             .task {
@@ -115,6 +117,9 @@ private struct FeedModePicker: View {
         }
         .pickerStyle(.segmented)
         .padding(.vertical, DesignTokens.Spacing.sm)
+        .accessibilityLabel("Feed mode")
+        .accessibilityValue(selectedMode.accessibilityValue)
+        .accessibilityHint("Switches between fruit community posts and trending posts.")
     }
 
     private var binding: Binding<FeedMode> {
@@ -122,6 +127,64 @@ private struct FeedModePicker: View {
             get: { selectedMode },
             set: { onSelect($0) }
         )
+    }
+}
+
+private struct FeedLoadingRow: View {
+    let title: String
+
+    var body: some View {
+        HStack(spacing: DesignTokens.Spacing.sm) {
+            ProgressView()
+            Text(title)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, DesignTokens.Spacing.xl)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(title)
+    }
+}
+
+private struct FeedEmptyState: View {
+    let title: String
+    let message: String
+    let showsCreateAction: Bool
+    let onCreatePost: () -> Void
+
+    var body: some View {
+        VStack(spacing: DesignTokens.Spacing.md) {
+            Image(systemName: "text.bubble")
+                .font(.system(size: 36, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+
+            VStack(spacing: DesignTokens.Spacing.xs) {
+                Text(title)
+                    .font(.headline)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(title). \(message)")
+
+            if showsCreateAction {
+                Button {
+                    onCreatePost()
+                } label: {
+                    Label("Create post", systemImage: "square.and.pencil")
+                }
+                .buttonStyle(.borderedProminent)
+                .accessibilityHint("Opens the post composer.")
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, DesignTokens.Spacing.xl)
+        .padding(.horizontal, DesignTokens.Spacing.md)
     }
 }
 

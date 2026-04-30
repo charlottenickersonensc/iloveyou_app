@@ -42,6 +42,7 @@ public struct PostDetailView: View {
             HStack(spacing: DesignTokens.Spacing.sm) {
                 TextField("Add a comment", text: $commentText, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
+                    .accessibilityLabel("Comment text")
                 Button {
                     Task { await submitComment() }
                 } label: {
@@ -49,6 +50,8 @@ public struct PostDetailView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(trimmedComment.isEmpty || trimmedComment.count > 1000)
+                .accessibilityLabel("Send comment")
+                .accessibilityHint("Adds your comment to this post.")
             }
             .padding(DesignTokens.Spacing.md)
         }

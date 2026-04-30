@@ -27,6 +27,20 @@ public enum FeedMode: String, CaseIterable, Identifiable, Equatable {
         case .trending: return "Likes and comments will lift posts here."
         }
     }
+
+    public var loadingTitle: String {
+        switch self {
+        case .fruit: return "Loading fruit posts"
+        case .trending: return "Loading trending posts"
+        }
+    }
+
+    public var accessibilityValue: String {
+        switch self {
+        case .fruit: return "Fruit community posts"
+        case .trending: return "Trending posts"
+        }
+    }
 }
 
 @MainActor
@@ -55,7 +69,7 @@ public final class FeedViewModel: ObservableObject {
     }
 
     public func loadInitial() async {
-        guard posts.isEmpty else { return }
+        guard posts.isEmpty, !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         await load(reset: true)
