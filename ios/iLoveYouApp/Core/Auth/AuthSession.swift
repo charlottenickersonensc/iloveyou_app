@@ -111,6 +111,67 @@ public struct ReportContentInput: Equatable {
     }
 }
 
+public enum Mood: String, CaseIterable, Codable, Equatable, Identifiable {
+    case great
+    case good
+    case okay
+    case low
+    case hard
+
+    public var id: String { rawValue }
+
+    public var displayTitle: String {
+        switch self {
+        case .great: return "Great"
+        case .good: return "Good"
+        case .okay: return "Okay"
+        case .low: return "Low"
+        case .hard: return "Hard"
+        }
+    }
+
+    public var systemImageName: String {
+        switch self {
+        case .great: return "sun.max.fill"
+        case .good: return "leaf.fill"
+        case .okay: return "circle.lefthalf.filled"
+        case .low: return "cloud.fill"
+        case .hard: return "cloud.rain.fill"
+        }
+    }
+}
+
+public struct MoodCheckin: Identifiable, Codable, Equatable {
+    public let id: String
+    public let userId: String
+    public let fruitCommunityId: String
+    public let date: String
+    public let mood: Mood
+    public let note: String?
+    public let createdAt: Date
+    public let updatedAt: Date
+}
+
+public struct MoodCheckinInput: Equatable {
+    public var date: String
+    public var mood: Mood
+    public var note: String?
+
+    public init(date: String, mood: Mood, note: String? = nil) {
+        self.date = date
+        self.mood = mood
+        self.note = note
+    }
+}
+
+public struct DailyAffirmation: Identifiable, Codable, Equatable {
+    public let id: String
+    public let date: String
+    public let text: String
+    public let active: Bool
+    public let source: String
+}
+
 public enum ReportReason: String, CaseIterable, Codable, Equatable {
     case harassment
     case hate
@@ -156,4 +217,10 @@ public protocol FriendsRepository {
     func fetchPendingRequests(currentUser: User) async throws -> [Friendship]
     func fetchFriendships(currentUser: User) async throws -> [Friendship]
     func fetchUsers(ids: [String]) async throws -> [User]
+}
+
+public protocol MentalHealthRepository {
+    func fetchTodayMoodCheckin(date: String) async throws -> MoodCheckin?
+    func submitMoodCheckin(input: MoodCheckinInput) async throws -> MoodCheckin
+    func getTodayAffirmation() async throws -> DailyAffirmation
 }

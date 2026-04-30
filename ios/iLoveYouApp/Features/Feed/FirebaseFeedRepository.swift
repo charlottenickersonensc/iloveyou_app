@@ -183,6 +183,57 @@ public final class FirebaseFeedRepository: FeedRepository {
     }
 }
 
+public final class FirebaseMentalHealthRepository: MentalHealthRepository {
+    public init() {}
+
+    public func fetchTodayMoodCheckin(date: String) async throws -> MoodCheckin? {
+        #if canImport(FirebaseAuth) && canImport(FirebaseFirestore)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw AuthRepositoryError.missingAuthenticatedUser
+        }
+        let document = try await Firestore.firestore()
+            .collection("moodCheckins")
+            .document("\(uid)_\(date.replacingOccurrences(of: "-", with: ""))")
+            .getDocument()
+        guard let data = document.data() else { return nil }
+        return try MentalHealthMapper.mapMoodCheckin(id: document.documentID, data: data)
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+
+    public func submitMoodCheckin(input: MoodCheckinInput) async throws -> MoodCheckin {
+        #if canImport(FirebaseFunctions)
+        var payload: [String: Any] = [
+            "date": input.date,
+            "mood": input.mood.rawValue
+        ]
+        if let note = input.note?.trimmingCharacters(in: .whitespacesAndNewlines), !note.isEmpty {
+            payload["note"] = note
+        }
+        let result = try await Functions.functions().httpsCallable("submitMoodCheckin").call(payload)
+        guard let checkin = MentalHealthMapper.mapCallableMoodCheckin(from: result.data) else {
+            throw AuthRepositoryError.missingCallableResponse("submitMoodCheckin")
+        }
+        return checkin
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+
+    public func getTodayAffirmation() async throws -> DailyAffirmation {
+        #if canImport(FirebaseFunctions)
+        let result = try await Functions.functions().httpsCallable("getTodayAffirmation").call([:])
+        guard let affirmation = MentalHealthMapper.mapCallableAffirmation(from: result.data) else {
+            throw AuthRepositoryError.missingCallableResponse("getTodayAffirmation")
+        }
+        return affirmation
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+}
+
 private extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
@@ -255,6 +306,68 @@ private enum PostMapper {
     private static func url(from value: Any?) -> URL? {
         guard let string = value as? String, !string.isEmpty else { return nil }
         return URL(string: string)
+    }
+
+    private static func date(from value: Any?) -> Date? {
+        if let date = value as? Date {
+            return date
+        }
+        #if canImport(FirebaseFirestore)
+        if let timestamp = value as? Timestamp {
+            return timestamp.dateValue()
+        }
+        #endif
+        if let data = value as? [String: Any] {
+            let seconds = data["_seconds"] as? TimeInterval ?? data["seconds"] as? TimeInterval
+            let nanoseconds = data["_nanoseconds"] as? TimeInterval ?? data["nanoseconds"] as? TimeInterval ?? 0
+            if let seconds {
+                return Date(timeIntervalSince1970: seconds + nanoseconds / 1_000_000_000)
+            }
+        }
+        if let milliseconds = value as? TimeInterval {
+            return Date(timeIntervalSince1970: milliseconds / 1_000)
+        }
+        return nil
+    }
+}
+
+private enum MentalHealthMapper {
+    static func mapCallableMoodCheckin(from response: Any) -> MoodCheckin? {
+        guard let envelope = response as? [String: Any],
+              let data = envelope["checkin"] as? [String: Any],
+              let id = data["id"] as? String else {
+            return nil
+        }
+        return try? mapMoodCheckin(id: id, data: data)
+    }
+
+    static func mapMoodCheckin(id: String, data: [String: Any]) throws -> MoodCheckin {
+        MoodCheckin(
+            id: id,
+            userId: data["userId"] as? String ?? "",
+            fruitCommunityId: data["fruitCommunityId"] as? String ?? "",
+            date: data["date"] as? String ?? "",
+            mood: Mood(rawValue: data["mood"] as? String ?? "okay") ?? .okay,
+            note: data["note"] as? String,
+            createdAt: date(from: data["createdAt"]) ?? Date(),
+            updatedAt: date(from: data["updatedAt"]) ?? Date()
+        )
+    }
+
+    static func mapCallableAffirmation(from response: Any) -> DailyAffirmation? {
+        guard let envelope = response as? [String: Any],
+              let data = envelope["affirmation"] as? [String: Any],
+              let id = data["id"] as? String,
+              let text = data["text"] as? String else {
+            return nil
+        }
+        return DailyAffirmation(
+            id: id,
+            date: data["date"] as? String ?? "",
+            text: text,
+            active: data["active"] as? Bool ?? true,
+            source: data["source"] as? String ?? "scheduled"
+        )
     }
 
     private static func date(from value: Any?) -> Date? {

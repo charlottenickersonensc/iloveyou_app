@@ -29,6 +29,8 @@ public struct AppRootView: View {
                     FeedView(viewModel: FeedViewModel(
                         currentUser: user,
                         feedRepository: authStateStore.feedRepository
+                    ), mentalHealthViewModel: MentalHealthViewModel(
+                        repository: authStateStore.mentalHealthRepository
                     ))
                     .tabItem {
                         Label("Feed", systemImage: "text.bubble")

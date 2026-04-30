@@ -162,8 +162,8 @@ service cloud.firestore {
     }
 
     match /moodCheckins/{checkinId} {
-      allow read, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if false;
     }
 
     match /dailyAffirmations/{dateId} {

@@ -15,6 +15,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  deleteDoc,
   setDoc,
   updateDoc,
   where
@@ -219,6 +220,22 @@ describe("Firestore fruit immutability rules", () => {
         isRead: false,
         createdAt: serverTimestamp()
       });
+      await setDoc(doc(db, "moodCheckins/alice_20260102"), {
+        id: "alice_20260102",
+        userId: "alice",
+        fruitCommunityId: "apple",
+        date: "2026-01-02",
+        mood: "okay",
+        note: null,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      await setDoc(doc(db, "dailyAffirmations/20260102"), {
+        id: "2026-01-02",
+        text: "You are grounded.",
+        active: true,
+        createdAt: serverTimestamp()
+      });
     });
   });
 
@@ -411,4 +428,39 @@ describe("Firestore fruit immutability rules", () => {
     }));
   });
 
+  it("keeps mood check-ins private and callable-only", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+    const bobDb = testEnv.authenticatedContext("bob").firestore();
+
+    await assertSucceeds(getDoc(doc(aliceDb, "moodCheckins/alice_20260102")));
+    await assertFails(getDoc(doc(bobDb, "moodCheckins/alice_20260102")));
+    await assertFails(setDoc(doc(aliceDb, "moodCheckins/alice_20260103"), {
+      id: "alice_20260103",
+      userId: "alice",
+      fruitCommunityId: "apple",
+      date: "2026-01-03",
+      mood: "good",
+      note: null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    }));
+    await assertFails(updateDoc(doc(aliceDb, "moodCheckins/alice_20260102"), {
+      mood: "great",
+      fruitCommunityId: "banana",
+      updatedAt: serverTimestamp()
+    }));
+    await assertFails(deleteDoc(doc(aliceDb, "moodCheckins/alice_20260102")));
+  });
+
+  it("allows signed-in daily affirmation reads and rejects writes", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+
+    await assertSucceeds(getDoc(doc(aliceDb, "dailyAffirmations/20260102")));
+    await assertFails(setDoc(doc(aliceDb, "dailyAffirmations/20260103"), {
+      id: "2026-01-03",
+      text: "Client write",
+      active: true,
+      createdAt: serverTimestamp()
+    }));
+  });
 });

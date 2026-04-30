@@ -12,6 +12,10 @@ import {
   respondToFriendRequestForUid,
   sendFriendRequestForUid
 } from "./services/socialService";
+import {
+  getTodayAffirmationForUid,
+  submitMoodCheckinForUid
+} from "./services/mentalHealthService";
 import {assertAuth} from "./utils/assertAuth";
 
 initializeApp();
@@ -54,4 +58,14 @@ export const sendFriendRequest = onCall(async (request) => {
 export const respondToFriendRequest = onCall(async (request) => {
   const uid = assertAuth(request.auth);
   return respondToFriendRequestForUid(uid, request.data);
+});
+
+export const submitMoodCheckin = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return submitMoodCheckinForUid(uid, request.data);
+});
+
+export const getTodayAffirmation = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return getTodayAffirmationForUid(uid, request.data);
 });

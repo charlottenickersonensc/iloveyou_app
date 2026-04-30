@@ -164,3 +164,74 @@ public final class FeedViewModel: ObservableObject {
         )
     }
 }
+
+@MainActor
+public final class MentalHealthViewModel: ObservableObject {
+    @Published public private(set) var affirmation: DailyAffirmation?
+    @Published public private(set) var todayCheckin: MoodCheckin?
+    @Published public private(set) var isLoading = false
+    @Published public private(set) var isSaving = false
+    @Published public var selectedMood: Mood?
+    @Published public var noteText = ""
+    @Published public var errorMessage: String?
+
+    private let repository: MentalHealthRepository
+    private let calendar: Calendar
+
+    public init(repository: MentalHealthRepository, calendar: Calendar = .current) {
+        self.repository = repository
+        self.calendar = calendar
+    }
+
+    public func loadToday() async {
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            async let affirmationTask = repository.getTodayAffirmation()
+            async let checkinTask = repository.fetchTodayMoodCheckin(date: todayDateString)
+            let (affirmation, checkin) = try await (affirmationTask, checkinTask)
+            self.affirmation = affirmation
+            apply(checkin: checkin)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    public func submitMood() async {
+        guard let selectedMood else { return }
+        isSaving = true
+        defer { isSaving = false }
+        do {
+            let saved = try await repository.submitMoodCheckin(input: MoodCheckinInput(
+                date: todayDateString,
+                mood: selectedMood,
+                note: trimmedNote
+            ))
+            apply(checkin: saved)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func apply(checkin: MoodCheckin?) {
+        todayCheckin = checkin
+        selectedMood = checkin?.mood ?? selectedMood
+        noteText = checkin?.note ?? noteText
+    }
+
+    private var trimmedNote: String? {
+        let trimmed = noteText.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private var todayDateString: String {
+        var utcCalendar = calendar
+        utcCalendar.timeZone = TimeZone(secondsFromGMT: 0) ?? TimeZone.current
+        let components = utcCalendar.dateComponents([.year, .month, .day], from: Date())
+        guard let year = components.year, let month = components.month, let day = components.day else {
+            return "1970-01-01"
+        }
+        return String(format: "%04d-%02d-%02d", year, month, day)
+    }
+}

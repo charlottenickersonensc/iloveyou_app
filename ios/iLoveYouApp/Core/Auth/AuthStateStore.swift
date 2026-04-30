@@ -17,6 +17,7 @@ public final class AuthStateStore: ObservableObject {
     public let profileRepository: ProfileRepository
     public let feedRepository: FeedRepository
     public let friendsRepository: FriendsRepository
+    public let mentalHealthRepository: MentalHealthRepository
     private let fruitRevealStore: FruitRevealStore
 
     public init(
@@ -24,12 +25,14 @@ public final class AuthStateStore: ObservableObject {
         profileRepository: ProfileRepository = FirebaseProfileRepository(),
         feedRepository: FeedRepository = FirebaseFeedRepository(),
         friendsRepository: FriendsRepository = FirebaseFriendsRepository(),
+        mentalHealthRepository: MentalHealthRepository = FirebaseMentalHealthRepository(),
         fruitRevealStore: FruitRevealStore = UserDefaultsFruitRevealStore()
     ) {
         self.authRepository = authRepository
         self.profileRepository = profileRepository
         self.feedRepository = feedRepository
         self.friendsRepository = friendsRepository
+        self.mentalHealthRepository = mentalHealthRepository
         self.fruitRevealStore = fruitRevealStore
     }
 

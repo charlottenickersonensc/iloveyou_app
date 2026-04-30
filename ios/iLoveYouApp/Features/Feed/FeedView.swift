@@ -2,45 +2,57 @@ import SwiftUI
 
 public struct FeedView: View {
     @StateObject private var viewModel: FeedViewModel
+    @StateObject private var mentalHealthViewModel: MentalHealthViewModel
     @State private var isShowingComposer = false
     @State private var reportedPost: Post?
 
-    public init(viewModel: FeedViewModel) {
+    public init(viewModel: FeedViewModel, mentalHealthViewModel: MentalHealthViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        self._mentalHealthViewModel = StateObject(wrappedValue: mentalHealthViewModel)
     }
 
     public var body: some View {
         // TODO: Replace placeholder with exact Figma node for the Sprint 2 feed screen.
         NavigationStack {
-            Group {
+            List {
+                MentalHealthHeaderView(viewModel: mentalHealthViewModel)
+                    .listRowSeparator(.hidden)
+
                 if viewModel.isLoading {
                     ProgressView()
+                        .frame(maxWidth: .infinity)
                 } else if viewModel.posts.isEmpty {
-                    ContentUnavailableView("No posts yet", systemImage: "text.bubble", description: Text("Start the conversation."))
+                    ContentUnavailableView(
+                        "No posts yet",
+                        systemImage: "text.bubble",
+                        description: Text("Start the conversation.")
+                    )
+                    .listRowSeparator(.hidden)
                 } else {
-                    List {
-                        ForEach(viewModel.posts) { post in
-                            NavigationLink {
-                                PostDetailView(post: post, viewModel: viewModel)
-                            } label: {
-                                PostCardView(
-                                    post: post,
-                                    onLike: { Task { await viewModel.toggleLike(post: post) } },
-                                    onReport: { reportedPost = post }
-                                )
-                            }
-                            .buttonStyle(.plain)
-                            .task { await viewModel.loadMoreIfNeeded(currentPost: post) }
+                    ForEach(viewModel.posts) { post in
+                        NavigationLink {
+                            PostDetailView(post: post, viewModel: viewModel)
+                        } label: {
+                            PostCardView(
+                                post: post,
+                                onLike: { Task { await viewModel.toggleLike(post: post) } },
+                                onReport: { reportedPost = post }
+                            )
                         }
-
-                        if viewModel.isLoadingMore {
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                        }
+                        .buttonStyle(.plain)
+                        .task { await viewModel.loadMoreIfNeeded(currentPost: post) }
                     }
-                    .listStyle(.plain)
-                    .refreshable { await viewModel.refresh() }
+
+                    if viewModel.isLoadingMore {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                    }
                 }
+            }
+            .listStyle(.plain)
+            .refreshable {
+                await viewModel.refresh()
+                await mentalHealthViewModel.loadToday()
             }
             .navigationTitle("Feed")
             .toolbar {
@@ -53,7 +65,10 @@ public struct FeedView: View {
                     .accessibilityLabel("Create post")
                 }
             }
-            .task { await viewModel.loadInitial() }
+            .task {
+                await viewModel.loadInitial()
+                await mentalHealthViewModel.loadToday()
+            }
             .alert("Feed error", isPresented: errorBinding) {
                 Button("OK", role: .cancel) { viewModel.errorMessage = nil }
             } message: {
@@ -77,5 +92,99 @@ public struct FeedView: View {
             get: { viewModel.errorMessage != nil },
             set: { if !$0 { viewModel.errorMessage = nil } }
         )
+    }
+}
+
+private struct MentalHealthHeaderView: View {
+    @ObservedObject var viewModel: MentalHealthViewModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
+            DailyAffirmationCard(affirmation: viewModel.affirmation, isLoading: viewModel.isLoading)
+            MoodCheckinCard(viewModel: viewModel)
+        }
+        .padding(.vertical, DesignTokens.Spacing.sm)
+    }
+}
+
+private struct DailyAffirmationCard: View {
+    let affirmation: DailyAffirmation?
+    let isLoading: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
+            Label("Today", systemImage: "sparkles")
+                .font(.caption.bold())
+                .foregroundStyle(.secondary)
+
+            if isLoading && affirmation == nil {
+                ProgressView()
+            } else {
+                Text(affirmation?.text ?? "You are allowed to take up space.")
+                    .font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DesignTokens.Spacing.md)
+        .background(Color.accentColor.opacity(0.10))
+        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.sm))
+    }
+}
+
+private struct MoodCheckinCard: View {
+    @ObservedObject var viewModel: MentalHealthViewModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignTokens.Spacing.md) {
+            HStack {
+                Label("Mood", systemImage: "heart.text.square")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Spacer()
+                if let todayCheckin = viewModel.todayCheckin {
+                    Label(todayCheckin.mood.displayTitle, systemImage: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Picker("Mood", selection: $viewModel.selectedMood) {
+                ForEach(Mood.allCases) { mood in
+                    Label(mood.displayTitle, systemImage: mood.systemImageName)
+                        .tag(Optional(mood))
+                }
+            }
+            .pickerStyle(.segmented)
+
+            TextField("Optional note", text: $viewModel.noteText, axis: .vertical)
+                .lineLimit(1...3)
+                .textFieldStyle(.roundedBorder)
+
+            HStack {
+                if let error = viewModel.errorMessage {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                        .lineLimit(2)
+                }
+                Spacer()
+                Button {
+                    Task { await viewModel.submitMood() }
+                } label: {
+                    if viewModel.isSaving {
+                        ProgressView()
+                    } else {
+                        Label("Save", systemImage: "checkmark")
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.selectedMood == nil || viewModel.isSaving)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DesignTokens.Spacing.md)
+        .background(Color.secondary.opacity(0.10))
+        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.sm))
     }
 }
