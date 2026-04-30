@@ -1,5 +1,5 @@
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
-import {failedPrecondition, invalidArgument, notFound} from "../utils/errors";
+import {failedPrecondition, invalidArgument, notFound, permissionDenied} from "../utils/errors";
 import {postLikesRef, postsRef, reportsRef, usersRef, firestore} from "../utils/firestoreRefs";
 import {buildNotification, notificationRef} from "../utils/notifications";
 import {
@@ -18,6 +18,7 @@ type AppUserData = {
   displayUsername: string;
   avatarUrl?: string | null;
   fruitCommunityId: string;
+  isCaptain: boolean;
 };
 
 export type AppPost = {
@@ -33,9 +34,9 @@ export type AppPost = {
   visibility: "fruit" | "friends";
   locationText: null;
   isAnonymous: false;
-  pinned: false;
-  pinnedBy: null;
-  pinnedAt: null;
+  pinned: boolean;
+  pinnedBy: string | null;
+  pinnedAt: Timestamp | null;
   likeCount: number;
   commentCount: number;
   reportCount: number;
@@ -63,6 +64,7 @@ export type CreatePostInput = unknown;
 export type TogglePostLikeInput = unknown;
 export type CreateCommentInput = unknown;
 export type ReportContentInput = unknown;
+export type PinPostInput = unknown;
 
 export async function createPostForUid(uid: string, input: CreatePostInput): Promise<{post: AppPost}> {
   const data = validateInputObject(input);
@@ -258,6 +260,40 @@ export async function reportContentForUid(
   });
 }
 
+export async function pinPostForUid(uid: string, input: PinPostInput): Promise<{post: FirebaseFirestore.DocumentData}> {
+  const data = validateInputObject(input);
+  const postId = validateId(data.postId, "postId");
+  if (typeof data.pinned !== "boolean") {
+    throw invalidArgument("pinned is required.", {field: "pinned"});
+  }
+  const user = await loadUser(uid);
+  if (!user.isCaptain) {
+    throw permissionDenied("Only fruit captains can pin posts.");
+  }
+  const postRef = postsRef().doc(postId);
+
+  return firestore().runTransaction(async (transaction) => {
+    const postSnapshot = await transaction.get(postRef);
+    const post = await requireVisiblePost(transaction, postSnapshot, uid, user.fruitCommunityId);
+    const pinnedAt = data.pinned ? Timestamp.now() : null;
+    transaction.update(postRef, {
+      pinned: data.pinned,
+      pinnedBy: data.pinned ? uid : null,
+      pinnedAt,
+      updatedAt: FieldValue.serverTimestamp()
+    });
+    return {
+      post: {
+        ...post,
+        id: postSnapshot.id,
+        pinned: data.pinned,
+        pinnedBy: data.pinned ? uid : null,
+        pinnedAt
+      }
+    };
+  });
+}
+
 async function loadUser(uid: string): Promise<AppUserData> {
   const snapshot = await usersRef().doc(uid).get();
   if (!snapshot.exists) {
@@ -277,7 +313,8 @@ async function loadUser(uid: string): Promise<AppUserData> {
     username: data.username,
     displayUsername: data.displayUsername,
     avatarUrl: typeof data.avatarUrl === "string" ? data.avatarUrl : null,
-    fruitCommunityId: data.fruitCommunityId
+    fruitCommunityId: data.fruitCommunityId,
+    isCaptain: data.isCaptain === true
   };
 }
 

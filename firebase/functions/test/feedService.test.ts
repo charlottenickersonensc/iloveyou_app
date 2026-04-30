@@ -4,6 +4,7 @@ import {assertAuth} from "../src/utils/assertAuth";
 import {
   createCommentForUid,
   createPostForUid,
+  pinPostForUid,
   reportContentForUid,
   togglePostLikeForUid
 } from "../src/services/feedService";
@@ -22,7 +23,7 @@ async function clearFirestore() {
   await Promise.all(collections.map((collection) => db.recursiveDelete(collection)));
 }
 
-async function seedUser(uid: string, fruitCommunityId: string) {
+async function seedUser(uid: string, fruitCommunityId: string, isCaptain = false) {
   await getFirestore().collection("users").doc(uid).set({
     id: uid,
     email: `${uid}@example.com`,
@@ -32,7 +33,7 @@ async function seedUser(uid: string, fruitCommunityId: string) {
     fruitCommunityId,
     fruitCode: fruitCommunityId,
     role: "user",
-    isCaptain: false,
+    isCaptain,
     createdAt: Timestamp.now(),
     memberSince: Timestamp.now(),
     updatedAt: Timestamp.now(),
@@ -278,5 +279,58 @@ describe("feed service", () => {
 
     const savedPost = await getFirestore().collection("posts").doc(post.id).get();
     expect(savedPost.data()?.reportCount).toBe(1);
+  });
+
+  it("lets a fruit captain pin and unpin a same-fruit post", async () => {
+    await seedUser("apple_captain", "apple", true);
+    const post = (await createPostForUid("apple_user", {contentText: "Pin worthy"})).post;
+
+    const pinned = await pinPostForUid("apple_captain", {
+      postId: post.id,
+      pinned: true
+    });
+
+    expect(pinned.post.fruitCommunityId).toBe("apple");
+    expect(pinned.post.pinned).toBe(true);
+    expect(pinned.post.pinnedBy).toBe("apple_captain");
+    expect(pinned.post.pinnedAt).toBeInstanceOf(Timestamp);
+
+    let savedPost = await getFirestore().collection("posts").doc(post.id).get();
+    expect(savedPost.data()?.pinned).toBe(true);
+    expect(savedPost.data()?.pinnedBy).toBe("apple_captain");
+    expect(savedPost.data()?.pinnedAt).toBeInstanceOf(Timestamp);
+
+    const unpinned = await pinPostForUid("apple_captain", {
+      postId: post.id,
+      pinned: false
+    });
+
+    expect(unpinned.post.pinned).toBe(false);
+    expect(unpinned.post.pinnedBy).toBeNull();
+    expect(unpinned.post.pinnedAt).toBeNull();
+
+    savedPost = await getFirestore().collection("posts").doc(post.id).get();
+    expect(savedPost.data()?.pinned).toBe(false);
+    expect(savedPost.data()?.pinnedBy).toBeNull();
+    expect(savedPost.data()?.pinnedAt).toBeNull();
+  });
+
+  it("rejects non-captain pin attempts", async () => {
+    const post = (await createPostForUid("apple_user", {contentText: "No pin"})).post;
+
+    await expect(pinPostForUid("apple_user", {
+      postId: post.id,
+      pinned: true
+    })).rejects.toMatchObject({code: "permission-denied"});
+  });
+
+  it("rejects captain pin attempts for cross-fruit posts", async () => {
+    await seedUser("apple_captain", "apple", true);
+    const post = (await createPostForUid("banana_user", {contentText: "Other fruit"})).post;
+
+    await expect(pinPostForUid("apple_captain", {
+      postId: post.id,
+      pinned: true
+    })).rejects.toMatchObject({code: "failed-precondition"});
   });
 });

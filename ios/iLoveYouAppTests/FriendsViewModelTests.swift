@@ -79,6 +79,62 @@ final class FeedViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.hasMore)
         XCTAssertNil(viewModel.errorMessage)
     }
+
+    @MainActor
+    func testCaptainCanPinPostAndPinnedPostsSortFirst() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current", isCaptain: true)
+        let olderPost = TestFeedData.post(
+            id: "older-post",
+            fruitCommunityId: currentUser.fruitCommunityId,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000)
+        )
+        let newerPost = TestFeedData.post(
+            id: "newer-post",
+            fruitCommunityId: currentUser.fruitCommunityId,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_100)
+        )
+        let repository = MockFeedRepository()
+        repository.fruitPages = [
+            FeedPage(posts: [newerPost, olderPost], nextCursor: nil, hasMore: false)
+        ]
+        repository.pinResults = [
+            TestFeedData.post(
+                id: "older-post",
+                fruitCommunityId: currentUser.fruitCommunityId,
+                pinned: true,
+                createdAt: olderPost.createdAt
+            )
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository)
+
+        await viewModel.loadInitial()
+        await viewModel.setPinned(true, for: olderPost)
+
+        XCTAssertTrue(viewModel.canPinPosts)
+        XCTAssertEqual(repository.pinRequests, [RecordedPinRequest(postId: "older-post", pinned: true)])
+        XCTAssertEqual(viewModel.posts.map(\.id), ["older-post", "newer-post"])
+        XCTAssertEqual(viewModel.posts.first?.pinned, true)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    @MainActor
+    func testNonCaptainPinActionDoesNotCallRepository() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let post = TestFeedData.post(id: "post-1", fruitCommunityId: currentUser.fruitCommunityId)
+        let repository = MockFeedRepository()
+        repository.fruitPages = [
+            FeedPage(posts: [post], nextCursor: nil, hasMore: false)
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository)
+
+        await viewModel.loadInitial()
+        await viewModel.setPinned(true, for: post)
+
+        XCTAssertFalse(viewModel.canPinPosts)
+        XCTAssertTrue(repository.pinRequests.isEmpty)
+        XCTAssertEqual(viewModel.posts, [post])
+        XCTAssertNil(viewModel.errorMessage)
+    }
 }
 
 final class FriendsViewModelTests: XCTestCase {
@@ -273,7 +329,12 @@ final class NotificationViewModelTests: XCTestCase {
 }
 
 private enum TestSocialData {
-    static func user(id: String, username: String, fruitCommunityId: String = "apple") -> User {
+    static func user(
+        id: String,
+        username: String,
+        fruitCommunityId: String = "apple",
+        isCaptain: Bool = false
+    ) -> User {
         User(
             id: id,
             email: "\(username)@example.com",
@@ -282,6 +343,7 @@ private enum TestSocialData {
             dateOfBirth: "2000-01-01",
             fruitCommunityId: fruitCommunityId,
             fruitCode: fruitCommunityId,
+            isCaptain: isCaptain,
             memberSince: Date(timeIntervalSince1970: 1_700_000_000),
             profileCompleted: true
         )
@@ -355,9 +417,11 @@ private enum TestFeedData {
     static func post(
         id: String,
         fruitCommunityId: String,
+        pinned: Bool = false,
         likeCount: Int = 0,
         commentCount: Int = 0,
-        trendingScore: Int = 0
+        trendingScore: Int = 0,
+        createdAt: Date = Date(timeIntervalSince1970: 1_700_000_000)
     ) -> Post {
         Post(
             id: id,
@@ -366,11 +430,12 @@ private enum TestFeedData {
             authorDisplayUsername: "Author",
             fruitCommunityId: fruitCommunityId,
             contentText: "Post \(id)",
+            pinned: pinned,
             likeCount: likeCount,
             commentCount: commentCount,
             trendingScore: trendingScore,
-            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
-            updatedAt: Date(timeIntervalSince1970: 1_700_000_000)
+            createdAt: createdAt,
+            updatedAt: createdAt
         )
     }
 }
@@ -394,12 +459,19 @@ private struct RecordedNotificationFetch: Equatable {
     let startAfter: String?
 }
 
+private struct RecordedPinRequest: Equatable {
+    let postId: String
+    let pinned: Bool
+}
+
 private final class MockFeedRepository: FeedRepository {
     var fruitPages: [FeedPage] = []
     var trendingPages: [FeedPage] = []
     var fruitFetches: [RecordedFeedFetch] = []
     var trendingFetches: [RecordedFeedFetch] = []
     var createPostInputs: [CreatePostInput] = []
+    var pinRequests: [RecordedPinRequest] = []
+    var pinResults: [Post] = []
 
     func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage {
         fruitFetches.append(RecordedFeedFetch(
@@ -434,6 +506,12 @@ private final class MockFeedRepository: FeedRepository {
 
     func toggleLike(postId: String) async throws -> LikeResult {
         LikeResult(liked: true, likeCount: 1)
+    }
+
+    func pinPost(postId: String, pinned: Bool) async throws -> Post {
+        pinRequests.append(RecordedPinRequest(postId: postId, pinned: pinned))
+        guard !pinResults.isEmpty else { throw MockSocialError.missingResult }
+        return pinResults.removeFirst()
     }
 
     func createComment(postId: String, contentText: String) async throws -> PostComment {

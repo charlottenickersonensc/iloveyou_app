@@ -14,6 +14,10 @@ export function failedPrecondition(message: string, details?: ErrorDetails): Htt
   return new HttpsError("failed-precondition", message, details);
 }
 
+export function permissionDenied(message: string, details?: ErrorDetails): HttpsError {
+  return new HttpsError("permission-denied", message, details);
+}
+
 export function alreadyExists(message: string, details?: ErrorDetails): HttpsError {
   return new HttpsError("already-exists", message, details);
 }

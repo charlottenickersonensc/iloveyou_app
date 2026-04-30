@@ -383,6 +383,11 @@ describe("Firestore fruit immutability rules", () => {
       fruitCommunityId: "banana",
       likeCount: 10
     }));
+    await assertFails(updateDoc(doc(db, "posts/apple_post"), {
+      pinned: true,
+      pinnedBy: "alice",
+      pinnedAt: serverTimestamp()
+    }));
   });
 
   it("rejects direct cross-fruit writes through post rules", async () => {

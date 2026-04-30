@@ -16,8 +16,10 @@ public struct PostDetailView: View {
         // TODO: Replace placeholder with exact Figma node for the Sprint 2 comments screen.
         VStack(spacing: 0) {
             List {
-                PostCardView(post: post, onLike: {
-                    Task { await viewModel.toggleLike(post: post) }
+                PostCardView(post: displayedPost, canPin: viewModel.canPinPosts, onLike: {
+                    Task { await viewModel.toggleLike(post: displayedPost) }
+                }, onPin: { pinned in
+                    Task { await viewModel.setPinned(pinned, for: displayedPost) }
                 }, onReport: {})
 
                 Section("Comments") {
@@ -60,6 +62,10 @@ public struct PostDetailView: View {
 
     private var trimmedComment: String {
         commentText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var displayedPost: Post {
+        viewModel.posts.first(where: { $0.id == post.id }) ?? post
     }
 
     private var errorBinding: Binding<Bool> {

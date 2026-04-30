@@ -41,7 +41,9 @@ public struct FeedView: View {
                         } label: {
                             PostCardView(
                                 post: post,
+                                canPin: viewModel.canPinPosts,
                                 onLike: { Task { await viewModel.toggleLike(post: post) } },
+                                onPin: { pinned in Task { await viewModel.setPinned(pinned, for: post) } },
                                 onReport: { reportedPost = post }
                             )
                         }

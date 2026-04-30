@@ -153,6 +153,21 @@ public final class FirebaseFeedRepository: FeedRepository {
         #endif
     }
 
+    public func pinPost(postId: String, pinned: Bool) async throws -> Post {
+        #if canImport(FirebaseFunctions)
+        let result = try await Functions.functions().httpsCallable("pinPost").call([
+            "postId": postId,
+            "pinned": pinned
+        ])
+        guard let post = PostMapper.mapCallablePost(from: result.data) else {
+            throw AuthRepositoryError.missingCallableResponse("pinPost")
+        }
+        return post
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+
     public func createComment(postId: String, contentText: String) async throws -> PostComment {
         #if canImport(FirebaseFunctions)
         let result = try await Functions.functions().httpsCallable("createComment").call([

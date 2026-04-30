@@ -217,6 +217,7 @@ public protocol FeedRepository {
     func createPost(input: CreatePostInput) async throws -> Post
     func uploadPostImages(_ images: [PostImageUpload], draftPostId: String) async throws -> [URL]
     func toggleLike(postId: String) async throws -> LikeResult
+    func pinPost(postId: String, pinned: Bool) async throws -> Post
     func createComment(postId: String, contentText: String) async throws -> PostComment
     func reportContent(input: ReportContentInput) async throws
 }

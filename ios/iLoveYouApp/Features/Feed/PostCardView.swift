@@ -2,12 +2,22 @@ import SwiftUI
 
 public struct PostCardView: View {
     public let post: Post
+    public let canPin: Bool
     public let onLike: () -> Void
+    public let onPin: (Bool) -> Void
     public let onReport: () -> Void
 
-    public init(post: Post, onLike: @escaping () -> Void, onReport: @escaping () -> Void) {
+    public init(
+        post: Post,
+        canPin: Bool = false,
+        onLike: @escaping () -> Void,
+        onPin: @escaping (Bool) -> Void = { _ in },
+        onReport: @escaping () -> Void
+    ) {
         self.post = post
+        self.canPin = canPin
         self.onLike = onLike
+        self.onPin = onPin
         self.onReport = onReport
     }
 
@@ -31,6 +41,14 @@ public struct PostCardView: View {
                 Spacer()
 
                 Menu {
+                    if canPin {
+                        Button {
+                            onPin(!post.pinned)
+                        } label: {
+                            Label(post.pinned ? "Unpin post" : "Pin post", systemImage: post.pinned ? "pin.slash" : "pin")
+                        }
+                    }
+
                     Button(role: .destructive, action: onReport) {
                         Label("Report", systemImage: "flag")
                     }
@@ -44,6 +62,16 @@ public struct PostCardView: View {
             Text(post.contentText)
                 .font(.body)
                 .fixedSize(horizontal: false, vertical: true)
+
+            if post.pinned {
+                Label("Pinned", systemImage: "pin.fill")
+                    .font(.caption.bold())
+                    .foregroundStyle(Color.accentColor)
+                    .padding(.horizontal, DesignTokens.Spacing.sm)
+                    .padding(.vertical, DesignTokens.Spacing.xs)
+                    .background(Color.accentColor.opacity(0.12), in: Capsule())
+                    .accessibilityLabel("Pinned post")
+            }
 
             if !post.imageUrls.isEmpty {
                 ImageGrid(urls: post.imageUrls)

@@ -44,6 +44,10 @@ public final class FeedViewModel: ObservableObject {
     private let pageSize: Int
     private var nextCursor: Any?
 
+    public var canPinPosts: Bool {
+        currentUser.isCaptain
+    }
+
     public init(currentUser: User, feedRepository: FeedRepository, pageSize: Int = 25) {
         self.currentUser = currentUser
         self.feedRepository = feedRepository
@@ -89,7 +93,7 @@ public final class FeedViewModel: ObservableObject {
                 visibility: visibility
             ))
             if feedMode == .fruit {
-                posts.insert(post, at: 0)
+                posts = sortedFruitPosts(posts + [post])
             } else {
                 await load(reset: true)
             }
@@ -110,6 +114,29 @@ public final class FeedViewModel: ObservableObject {
             posts[index] = postWithLikeCount(posts[index], likeCount: result.likeCount)
         } catch {
             posts[index] = original
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    public func setPinned(_ pinned: Bool, for post: Post) async {
+        guard canPinPosts else { return }
+        guard let index = posts.firstIndex(where: { $0.id == post.id }) else { return }
+        let originalPosts = posts
+        posts[index] = postWithPinned(posts[index], pinned: pinned)
+        if feedMode == .fruit {
+            posts = sortedFruitPosts(posts)
+        }
+
+        do {
+            let updatedPost = try await feedRepository.pinPost(postId: post.id, pinned: pinned)
+            if let updatedIndex = posts.firstIndex(where: { $0.id == updatedPost.id }) {
+                posts[updatedIndex] = updatedPost
+                if feedMode == .fruit {
+                    posts = sortedFruitPosts(posts)
+                }
+            }
+        } catch {
+            posts = originalPosts
             errorMessage = error.localizedDescription
         }
     }
@@ -166,6 +193,41 @@ public final class FeedViewModel: ObservableObject {
     private func optimisticLikeState(for post: Post) -> Post {
         let delta = post.isLikedByCurrentUser ? 1 : -1
         return postWithLikeCount(post, likeCount: max(0, post.likeCount + delta))
+    }
+
+    private func sortedFruitPosts(_ posts: [Post]) -> [Post] {
+        posts.sorted {
+            if $0.pinned != $1.pinned {
+                return $0.pinned && !$1.pinned
+            }
+            return $0.createdAt > $1.createdAt
+        }
+    }
+
+    private func postWithPinned(_ post: Post, pinned: Bool) -> Post {
+        Post(
+            id: post.id,
+            authorId: post.authorId,
+            authorUsername: post.authorUsername,
+            authorDisplayUsername: post.authorDisplayUsername,
+            authorAvatarUrl: post.authorAvatarUrl,
+            fruitCommunityId: post.fruitCommunityId,
+            groupId: post.groupId,
+            contentText: post.contentText,
+            imageUrls: post.imageUrls,
+            visibility: post.visibility,
+            locationText: post.locationText,
+            isAnonymous: post.isAnonymous,
+            pinned: pinned,
+            likeCount: post.likeCount,
+            commentCount: post.commentCount,
+            reportCount: post.reportCount,
+            trendingScore: post.trendingScore,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+            deletedAt: post.deletedAt,
+            isLikedByCurrentUser: post.isLikedByCurrentUser
+        )
     }
 
     private func postWithLikeCount(_ post: Post, likeCount: Int) -> Post {

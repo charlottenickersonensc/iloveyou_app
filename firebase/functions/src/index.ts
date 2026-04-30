@@ -5,6 +5,7 @@ import {updateProfileForUid} from "./services/profileService";
 import {
   createCommentForUid,
   createPostForUid,
+  pinPostForUid,
   reportContentForUid,
   togglePostLikeForUid
 } from "./services/feedService";
@@ -49,6 +50,11 @@ export const createComment = onCall(async (request) => {
 export const reportContent = onCall(async (request) => {
   const uid = assertAuth(request.auth);
   return reportContentForUid(uid, request.data);
+});
+
+export const pinPost = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return pinPostForUid(uid, request.data);
 });
 
 export const sendFriendRequest = onCall(async (request) => {
