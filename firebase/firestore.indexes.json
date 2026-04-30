@@ -52,6 +52,14 @@
       ]
     },
     {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "fruitCommunityId", "order": "ASCENDING" },
+        { "fieldPath": "username", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "friendships",
       "queryScope": "COLLECTION",
       "fields": [

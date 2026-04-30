@@ -133,6 +133,11 @@ public enum ReportReason: String, CaseIterable, Codable, Equatable {
     }
 }
 
+public enum FriendRequestAction: String, Equatable {
+    case accept
+    case decline
+}
+
 public protocol FeedRepository {
     func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage
     func fetchTrendingFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage
@@ -141,4 +146,14 @@ public protocol FeedRepository {
     func toggleLike(postId: String) async throws -> LikeResult
     func createComment(postId: String, contentText: String) async throws -> PostComment
     func reportContent(input: ReportContentInput) async throws
+}
+
+public protocol FriendsRepository {
+    func searchPeople(currentUser: User, query: String) async throws -> [User]
+    func sendRequest(receiverId: String) async throws -> Friendship
+    func respond(friendshipId: String, action: FriendRequestAction) async throws -> Friendship?
+    func fetchFriends(currentUser: User) async throws -> [User]
+    func fetchPendingRequests(currentUser: User) async throws -> [Friendship]
+    func fetchFriendships(currentUser: User) async throws -> [Friendship]
+    func fetchUsers(ids: [String]) async throws -> [User]
 }

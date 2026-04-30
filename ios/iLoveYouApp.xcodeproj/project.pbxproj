@@ -47,6 +47,9 @@
 		A1B2C3D40000000000000226 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000126 /* CreatePostView.swift */; };
 		A1B2C3D40000000000000227 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000127 /* PostDetailView.swift */; };
 		A1B2C3D40000000000000228 /* ReportContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000128 /* ReportContentView.swift */; };
+		A1B2C3D40000000000000229 /* FirebaseFriendsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000129 /* FirebaseFriendsRepository.swift */; };
+		A1B2C3D4000000000000022A /* FriendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000012A /* FriendsViewModel.swift */; };
+		A1B2C3D4000000000000022B /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4000000000000012B /* FriendsView.swift */; };
 		A1B2C3D40000000000000401 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000301 /* FirebaseAuth */; };
 		A1B2C3D40000000000000402 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000302 /* FirebaseFirestore */; };
 		A1B2C3D40000000000000403 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D40000000000000303 /* FirebaseFunctions */; };
@@ -98,6 +101,9 @@
 		A1B2C3D40000000000000126 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/CreatePostView.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000127 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/PostDetailView.swift; sourceTree = "<group>"; };
 		A1B2C3D40000000000000128 /* ReportContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Feed/ReportContentView.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000129 /* FirebaseFriendsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Friends/FirebaseFriendsRepository.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000012A /* FriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Friends/FriendsViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D4000000000000012B /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Friends/FriendsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +175,9 @@
 				A1B2C3D40000000000000126 /* CreatePostView.swift */,
 				A1B2C3D40000000000000127 /* PostDetailView.swift */,
 				A1B2C3D40000000000000128 /* ReportContentView.swift */,
+				A1B2C3D40000000000000129 /* FirebaseFriendsRepository.swift */,
+				A1B2C3D4000000000000012A /* FriendsViewModel.swift */,
+				A1B2C3D4000000000000012B /* FriendsView.swift */,
 			);
 			path = iLoveYouApp;
 			sourceTree = "<group>";
@@ -303,6 +312,9 @@
 				A1B2C3D40000000000000226 /* CreatePostView.swift in Sources */,
 				A1B2C3D40000000000000227 /* PostDetailView.swift in Sources */,
 				A1B2C3D40000000000000228 /* ReportContentView.swift in Sources */,
+				A1B2C3D40000000000000229 /* FirebaseFriendsRepository.swift in Sources */,
+				A1B2C3D4000000000000022A /* FriendsViewModel.swift in Sources */,
+				A1B2C3D4000000000000022B /* FriendsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

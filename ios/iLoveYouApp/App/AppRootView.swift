@@ -34,6 +34,14 @@ public struct AppRootView: View {
                         Label("Feed", systemImage: "text.bubble")
                     }
 
+                    FriendsView(viewModel: FriendsViewModel(
+                        currentUser: user,
+                        friendsRepository: authStateStore.friendsRepository
+                    ))
+                    .tabItem {
+                        Label("Friends", systemImage: "person.2")
+                    }
+
                     ProfileView(viewModel: ProfileViewModel(
                         user: user,
                         profileRepository: authStateStore.profileRepository
