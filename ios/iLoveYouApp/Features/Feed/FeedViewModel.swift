@@ -41,11 +41,12 @@ public final class FeedViewModel: ObservableObject {
         await load(reset: false)
     }
 
-    public func createPost(contentText: String, imageUrls: [URL] = []) async {
+    public func createPost(contentText: String, imageUrls: [URL] = [], visibility: PostVisibility = .fruit) async {
         do {
             let post = try await feedRepository.createPost(input: CreatePostInput(
                 contentText: contentText,
-                imageUrls: imageUrls
+                imageUrls: imageUrls,
+                visibility: visibility
             ))
             posts.insert(post, at: 0)
         } catch {
@@ -128,6 +129,7 @@ public final class FeedViewModel: ObservableObject {
             likeCount: likeCount,
             commentCount: copy.commentCount,
             reportCount: copy.reportCount,
+            trendingScore: copy.trendingScore,
             createdAt: copy.createdAt,
             updatedAt: copy.updatedAt,
             deletedAt: copy.deletedAt,
@@ -154,6 +156,7 @@ public final class FeedViewModel: ObservableObject {
             likeCount: post.likeCount,
             commentCount: commentCount,
             reportCount: post.reportCount,
+            trendingScore: post.trendingScore,
             createdAt: post.createdAt,
             updatedAt: post.updatedAt,
             deletedAt: post.deletedAt,

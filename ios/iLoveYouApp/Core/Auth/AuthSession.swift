@@ -88,10 +88,12 @@ public struct FeedPage {
 public struct CreatePostInput: Equatable {
     public var contentText: String
     public var imageUrls: [URL]
+    public var visibility: PostVisibility
 
-    public init(contentText: String, imageUrls: [URL] = []) {
+    public init(contentText: String, imageUrls: [URL] = [], visibility: PostVisibility = .fruit) {
         self.contentText = contentText
         self.imageUrls = imageUrls
+        self.visibility = visibility
     }
 }
 
@@ -133,6 +135,7 @@ public enum ReportReason: String, CaseIterable, Codable, Equatable {
 
 public protocol FeedRepository {
     func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage
+    func fetchTrendingFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage
     func createPost(input: CreatePostInput) async throws -> Post
     func uploadPostImages(_ images: [PostImageUpload], draftPostId: String) async throws -> [URL]
     func toggleLike(postId: String) async throws -> LikeResult

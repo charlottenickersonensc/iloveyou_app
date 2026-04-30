@@ -17,6 +17,7 @@ public struct Post: Identifiable, Codable, Equatable {
     public let likeCount: Int
     public let commentCount: Int
     public let reportCount: Int
+    public let trendingScore: Int
     public let createdAt: Date
     public let updatedAt: Date
     public let deletedAt: Date?
@@ -39,6 +40,7 @@ public struct Post: Identifiable, Codable, Equatable {
         likeCount: Int = 0,
         commentCount: Int = 0,
         reportCount: Int = 0,
+        trendingScore: Int = 0,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date? = nil,
@@ -60,6 +62,7 @@ public struct Post: Identifiable, Codable, Equatable {
         self.likeCount = likeCount
         self.commentCount = commentCount
         self.reportCount = reportCount
+        self.trendingScore = trendingScore
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
@@ -69,6 +72,7 @@ public struct Post: Identifiable, Codable, Equatable {
 
 public enum PostVisibility: String, Codable, Equatable {
     case fruit
+    case friends
 }
 
 public struct PostComment: Identifiable, Codable, Equatable {

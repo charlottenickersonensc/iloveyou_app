@@ -7,6 +7,7 @@ import {
   validateContentText,
   validateImageUrls,
   validateInputObject,
+  validatePostVisibility,
   validateReportDetails,
   validateReportReason
 } from "../validators/feedValidation";
@@ -29,7 +30,7 @@ export type AppPost = {
   groupId: null;
   contentText: string;
   imageUrls: string[];
-  visibility: "fruit";
+  visibility: "fruit" | "friends";
   locationText: null;
   isAnonymous: false;
   pinned: false;
@@ -38,6 +39,7 @@ export type AppPost = {
   likeCount: number;
   commentCount: number;
   reportCount: number;
+  trendingScore: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   deletedAt: null;
@@ -67,6 +69,7 @@ export async function createPostForUid(uid: string, input: CreatePostInput): Pro
   assertNoProtectedPostInput(data);
   const contentText = validateContentText(data.contentText, "contentText", 2000);
   const imageUrls = validateImageUrls(data.imageUrls);
+  const visibility = validatePostVisibility(data.visibility);
   const user = await loadUser(uid);
   const postRef = postsRef().doc();
   const now = Timestamp.now();
@@ -80,7 +83,7 @@ export async function createPostForUid(uid: string, input: CreatePostInput): Pro
     groupId: null,
     contentText,
     imageUrls,
-    visibility: "fruit",
+    visibility,
     locationText: null,
     isAnonymous: false,
     pinned: false,
@@ -89,6 +92,7 @@ export async function createPostForUid(uid: string, input: CreatePostInput): Pro
     likeCount: 0,
     commentCount: 0,
     reportCount: 0,
+    trendingScore: 0,
     createdAt: now,
     updatedAt: now,
     deletedAt: null
@@ -112,7 +116,7 @@ export async function togglePostLikeForUid(
       transaction.get(postRef),
       transaction.get(likeRef)
     ]);
-    const post = requireSameFruitPost(postSnapshot, user.fruitCommunityId);
+    const post = await requireVisiblePost(transaction, postSnapshot, uid, user.fruitCommunityId);
     const existingCount = numberField(post.likeCount);
 
     if (likeSnapshot.exists) {
@@ -120,6 +124,7 @@ export async function togglePostLikeForUid(
       transaction.delete(likeRef);
       transaction.update(postRef, {
         likeCount,
+        trendingScore: trendingScoreFor(likeCount, numberField(post.commentCount)),
         updatedAt: FieldValue.serverTimestamp()
       });
       return {liked: false, likeCount};
@@ -149,6 +154,7 @@ export async function togglePostLikeForUid(
     }
     transaction.update(postRef, {
       likeCount,
+      trendingScore: trendingScoreFor(likeCount, numberField(post.commentCount)),
       updatedAt: FieldValue.serverTimestamp()
     });
     return {liked: true, likeCount};
@@ -166,7 +172,8 @@ export async function createCommentForUid(uid: string, input: CreateCommentInput
 
   return firestore().runTransaction(async (transaction) => {
     const postSnapshot = await transaction.get(postRef);
-    const post = requireSameFruitPost(postSnapshot, user.fruitCommunityId);
+    const post = await requireVisiblePost(transaction, postSnapshot, uid, user.fruitCommunityId);
+    const commentCount = numberField(post.commentCount) + 1;
     const comment: AppComment = {
       id: commentRef.id,
       postId,
@@ -195,7 +202,8 @@ export async function createCommentForUid(uid: string, input: CreateCommentInput
       }));
     }
     transaction.update(postRef, {
-      commentCount: FieldValue.increment(1),
+      commentCount,
+      trendingScore: trendingScoreFor(numberField(post.likeCount), commentCount),
       updatedAt: FieldValue.serverTimestamp()
     });
     return {comment};
@@ -223,7 +231,7 @@ export async function reportContentForUid(
       transaction.get(postRef),
       transaction.get(reportRef)
     ]);
-    const post = requireSameFruitPost(postSnapshot, user.fruitCommunityId);
+    const post = await requireVisiblePost(transaction, postSnapshot, uid, user.fruitCommunityId);
     if (reportSnapshot.exists) {
       return {report: reportSnapshot.data() ?? {}, created: false};
     }
@@ -280,21 +288,46 @@ function validateId(value: unknown, field: string): string {
   return value.trim();
 }
 
-function requireSameFruitPost(
+async function requireVisiblePost(
+  transaction: FirebaseFirestore.Transaction,
   snapshot: FirebaseFirestore.DocumentSnapshot,
+  uid: string,
   userFruitCommunityId: string
-): FirebaseFirestore.DocumentData {
+): Promise<FirebaseFirestore.DocumentData> {
   if (!snapshot.exists) {
     throw notFound("Post not found.");
   }
   const post = snapshot.data();
-  if (!post || post.deletedAt != null || post.visibility !== "fruit") {
+  if (!post || post.deletedAt != null) {
     throw notFound("Post not found.");
   }
   if (post.fruitCommunityId !== userFruitCommunityId) {
     throw failedPrecondition("This post belongs to another fruit community.");
   }
-  return post;
+  if (post.visibility === "fruit" || post.authorId === uid) {
+    return post;
+  }
+  if (post.visibility === "friends" && typeof post.authorId === "string") {
+    const friendshipSnapshot = await transaction.get(friendshipsRefFor(uid, post.authorId));
+    const friendship = friendshipSnapshot.data();
+    if (
+      friendshipSnapshot.exists &&
+      friendship?.status === "accepted" &&
+      friendship.fruitCommunityId === userFruitCommunityId
+    ) {
+      return post;
+    }
+  }
+  throw notFound("Post not found.");
+}
+
+function friendshipsRefFor(uidA: string, uidB: string): FirebaseFirestore.DocumentReference {
+  const [userLowId, userHighId] = uidA < uidB ? [uidA, uidB] : [uidB, uidA];
+  return firestore().collection("friendships").doc(`${userLowId}_${userHighId}`);
+}
+
+function trendingScoreFor(likeCount: number, commentCount: number): number {
+  return likeCount * 2 + commentCount * 3;
 }
 
 function numberField(value: unknown): number {

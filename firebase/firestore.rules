@@ -22,10 +22,29 @@ service cloud.firestore {
       return isSignedIn() && currentUserDoc().data.fruitCommunityId == fruitCommunityId;
     }
 
+    function hasAcceptedFriendship(friendId, authorId, fruitCommunityId) {
+      return exists(/databases/$(database)/documents/friendships/$(friendId))
+        && get(/databases/$(database)/documents/friendships/$(friendId)).data.status == "accepted"
+        && get(/databases/$(database)/documents/friendships/$(friendId)).data.fruitCommunityId == fruitCommunityId
+        && request.auth.uid in get(/databases/$(database)/documents/friendships/$(friendId)).data.participantIds
+        && authorId in get(/databases/$(database)/documents/friendships/$(friendId)).data.participantIds;
+    }
+
+    function isAcceptedFriendOf(authorId, fruitCommunityId) {
+      return hasAcceptedFriendship(request.auth.uid + "_" + authorId, authorId, fruitCommunityId)
+        || hasAcceptedFriendship(authorId + "_" + request.auth.uid, authorId, fruitCommunityId);
+    }
+
     function isReadableFruitPost(postData) {
       return isSameFruit(postData.fruitCommunityId)
-        && postData.visibility == "fruit"
-        && postData.deletedAt == null;
+        && postData.deletedAt == null
+        && (
+          postData.visibility == "fruit"
+          || (
+            postData.visibility == "friends"
+            && (postData.authorId == request.auth.uid || isAcceptedFriendOf(postData.authorId, postData.fruitCommunityId))
+          )
+        );
     }
 
     function isAdmin() {

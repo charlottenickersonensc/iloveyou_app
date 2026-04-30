@@ -49,6 +49,42 @@ public final class FirebaseFeedRepository: FeedRepository {
         #endif
     }
 
+    public func fetchTrendingFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage {
+        #if canImport(FirebaseFirestore)
+        var query: Query = Firestore.firestore().collection("posts")
+            .whereField("fruitCommunityId", isEqualTo: currentUser.fruitCommunityId)
+            .whereField("visibility", isEqualTo: "fruit")
+            .whereField("deletedAt", isEqualTo: NSNull())
+            .order(by: "trendingScore", descending: true)
+            .order(by: "createdAt", descending: true)
+            .limit(to: pageSize)
+
+        if let cursor = startAfter as? DocumentSnapshot {
+            query = query.start(afterDocument: cursor)
+        }
+
+        let snapshot = try await query.getDocuments()
+        var posts = try snapshot.documents.map { document in
+            try PostMapper.map(id: document.documentID, data: document.data())
+        }
+        let likedPostIds = try await fetchLikedPostIds(
+            postIds: posts.map(\.id),
+            currentUser: currentUser
+        )
+        for index in posts.indices where likedPostIds.contains(posts[index].id) {
+            posts[index].isLikedByCurrentUser = true
+        }
+
+        return FeedPage(
+            posts: posts,
+            nextCursor: snapshot.documents.last,
+            hasMore: snapshot.documents.count == pageSize
+        )
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+
     #if canImport(FirebaseFirestore)
     private func fetchLikedPostIds(postIds: [String], currentUser: User) async throws -> Set<String> {
         guard !postIds.isEmpty else { return [] }
@@ -75,7 +111,8 @@ public final class FirebaseFeedRepository: FeedRepository {
         #if canImport(FirebaseFunctions)
         let payload: [String: Any] = [
             "contentText": input.contentText,
-            "imageUrls": input.imageUrls.map(\.absoluteString)
+            "imageUrls": input.imageUrls.map(\.absoluteString),
+            "visibility": input.visibility.rawValue
         ]
         let result = try await Functions.functions().httpsCallable("createPost").call(payload)
         guard let post = PostMapper.mapCallablePost(from: result.data) else {
@@ -203,6 +240,7 @@ private enum PostMapper {
             likeCount: data["likeCount"] as? Int ?? 0,
             commentCount: data["commentCount"] as? Int ?? 0,
             reportCount: data["reportCount"] as? Int ?? 0,
+            trendingScore: data["trendingScore"] as? Int ?? 0,
             createdAt: date(from: data["createdAt"]) ?? Date(),
             updatedAt: date(from: data["updatedAt"]) ?? Date(),
             deletedAt: date(from: data["deletedAt"])

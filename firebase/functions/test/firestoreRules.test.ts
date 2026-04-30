@@ -79,6 +79,20 @@ describe("Firestore fruit immutability rules", () => {
         updatedAt: serverTimestamp(),
         profileCompleted: false
       });
+      await setDoc(doc(db, "users/dana"), {
+        id: "dana",
+        email: "dana@example.com",
+        username: "dana",
+        displayUsername: "Dana",
+        fruitCommunityId: "apple",
+        fruitCode: "apple",
+        role: "user",
+        isCaptain: false,
+        createdAt: serverTimestamp(),
+        memberSince: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        profileCompleted: false
+      });
       await setDoc(doc(db, "posts/apple_post"), {
         id: "apple_post",
         authorId: "alice",
@@ -98,6 +112,7 @@ describe("Firestore fruit immutability rules", () => {
         likeCount: 0,
         commentCount: 0,
         reportCount: 0,
+        trendingScore: 0,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         deletedAt: null
@@ -121,6 +136,31 @@ describe("Firestore fruit immutability rules", () => {
         likeCount: 0,
         commentCount: 0,
         reportCount: 0,
+        trendingScore: 0,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        deletedAt: null
+      });
+      await setDoc(doc(db, "posts/dana_friends_post"), {
+        id: "dana_friends_post",
+        authorId: "dana",
+        authorUsername: "dana",
+        authorDisplayUsername: "Dana",
+        authorAvatarUrl: null,
+        fruitCommunityId: "apple",
+        groupId: null,
+        contentText: "Friends only",
+        imageUrls: [],
+        visibility: "friends",
+        locationText: null,
+        isAnonymous: false,
+        pinned: false,
+        pinnedBy: null,
+        pinnedAt: null,
+        likeCount: 2,
+        commentCount: 1,
+        reportCount: 0,
+        trendingScore: 7,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         deletedAt: null
@@ -150,6 +190,20 @@ describe("Firestore fruit immutability rules", () => {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         acceptedAt: null,
+        blockedAt: null
+      });
+      await setDoc(doc(db, "friendships/alice_dana"), {
+        id: "alice_dana",
+        userLowId: "alice",
+        userHighId: "dana",
+        requesterId: "alice",
+        receiverId: "dana",
+        participantIds: ["alice", "dana"],
+        fruitCommunityId: "apple",
+        status: "accepted",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        acceptedAt: serverTimestamp(),
         blockedAt: null
       });
       await setDoc(doc(db, "notifications/note_1"), {
@@ -197,6 +251,16 @@ describe("Firestore fruit immutability rules", () => {
     await assertFails(getDoc(doc(db, "posts/banana_post")));
   });
 
+  it("allows friends-only reads only for the author and accepted friends", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+    const carolDb = testEnv.authenticatedContext("carol").firestore();
+    const danaDb = testEnv.authenticatedContext("dana").firestore();
+
+    await assertSucceeds(getDoc(doc(aliceDb, "posts/dana_friends_post")));
+    await assertSucceeds(getDoc(doc(danaDb, "posts/dana_friends_post")));
+    await assertFails(getDoc(doc(carolDb, "posts/dana_friends_post")));
+  });
+
   it("allows the fruit feed query shape", async () => {
     const db = testEnv.authenticatedContext("alice").firestore();
     const feedQuery = query(
@@ -210,6 +274,31 @@ describe("Firestore fruit immutability rules", () => {
     );
 
     await assertSucceeds(getDocs(feedQuery));
+  });
+
+  it("allows accepted-friend post query shape and trending query shape", async () => {
+    const db = testEnv.authenticatedContext("alice").firestore();
+    const friendsQuery = query(
+      collection(db, "posts"),
+      where("fruitCommunityId", "==", "apple"),
+      where("visibility", "==", "friends"),
+      where("deletedAt", "==", null),
+      where("authorId", "in", ["dana"]),
+      orderBy("createdAt", "desc"),
+      limit(25)
+    );
+    const trendingQuery = query(
+      collection(db, "posts"),
+      where("fruitCommunityId", "==", "apple"),
+      where("visibility", "==", "fruit"),
+      where("deletedAt", "==", null),
+      orderBy("trendingScore", "desc"),
+      orderBy("createdAt", "desc"),
+      limit(25)
+    );
+
+    await assertSucceeds(getDocs(friendsQuery));
+    await assertSucceeds(getDocs(trendingQuery));
   });
 
   it("allows visible same-fruit comment reads and rejects comments on deleted posts", async () => {
@@ -238,6 +327,7 @@ describe("Firestore fruit immutability rules", () => {
         likeCount: 0,
         commentCount: 1,
         reportCount: 0,
+        trendingScore: 0,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         deletedAt: serverTimestamp()

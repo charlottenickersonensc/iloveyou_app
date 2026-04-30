@@ -25,13 +25,13 @@ export function assertNoProtectedPostInput(input: Record<string, unknown>): void
     "authorUsername",
     "authorDisplayUsername",
     "authorAvatarUrl",
-    "visibility",
     "pinned",
     "pinnedBy",
     "pinnedAt",
     "likeCount",
     "commentCount",
     "reportCount",
+    "trendingScore",
     "createdAt",
     "updatedAt",
     "deletedAt"
@@ -41,6 +41,16 @@ export function assertNoProtectedPostInput(input: Record<string, unknown>): void
       throw invalidArgument("Protected post fields are assigned by the server.", {field: key});
     }
   }
+}
+
+export function validatePostVisibility(value: unknown): "fruit" | "friends" {
+  if (value == null) {
+    return "fruit";
+  }
+  if (value === "fruit" || value === "friends") {
+    return value;
+  }
+  throw invalidArgument("Choose a valid post visibility.", {field: "visibility"});
 }
 
 export function validateContentText(value: unknown, field: string, maxLength: number): string {

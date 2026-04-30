@@ -40,6 +40,25 @@ async function seedUser(uid: string, fruitCommunityId: string) {
   });
 }
 
+async function seedFriendship(uidA: string, uidB: string, fruitCommunityId: string, status: "pending" | "accepted") {
+  const [userLowId, userHighId] = uidA < uidB ? [uidA, uidB] : [uidB, uidA];
+  const now = Timestamp.now();
+  await getFirestore().collection("friendships").doc(`${userLowId}_${userHighId}`).set({
+    id: `${userLowId}_${userHighId}`,
+    userLowId,
+    userHighId,
+    requesterId: uidA,
+    receiverId: uidB,
+    participantIds: [userLowId, userHighId],
+    fruitCommunityId,
+    status,
+    createdAt: now,
+    updatedAt: now,
+    acceptedAt: status === "accepted" ? now : null,
+    blockedAt: null
+  });
+}
+
 describe("feed service", () => {
   beforeAll(() => {
     process.env.GCLOUD_PROJECT = projectId;
@@ -67,7 +86,27 @@ describe("feed service", () => {
     expect(result.post.likeCount).toBe(0);
     expect(result.post.commentCount).toBe(0);
     expect(result.post.reportCount).toBe(0);
+    expect(result.post.trendingScore).toBe(0);
     expect(result.post.deletedAt).toBeNull();
+  });
+
+  it("creates a friends-only post without accepting client fruit fields", async () => {
+    const result = await createPostForUid("apple_user", {
+      contentText: "Hello close friends",
+      visibility: "friends"
+    });
+
+    expect(result.post.fruitCommunityId).toBe("apple");
+    expect(result.post.visibility).toBe("friends");
+
+    await expect(createPostForUid("apple_user", {
+      contentText: "Trying to choose score",
+      trendingScore: 99
+    })).rejects.toMatchObject({code: "invalid-argument"});
+    await expect(createPostForUid("apple_user", {
+      contentText: "Trying group visibility",
+      visibility: "group"
+    })).rejects.toMatchObject({code: "invalid-argument"});
   });
 
   it("rejects client-supplied fruitCommunityId", async () => {
@@ -155,6 +194,44 @@ describe("feed service", () => {
 
     const savedPost = await getFirestore().collection("posts").doc(post.id).get();
     expect(savedPost.data()?.commentCount).toBe(1);
+    expect(savedPost.data()?.trendingScore).toBe(3);
+  });
+
+  it("limits friends-only post interactions to the author and accepted same-fruit friends", async () => {
+    await seedUser("apple_friend", "apple");
+    await seedUser("apple_pending", "apple");
+    await seedUser("apple_stranger", "apple");
+    await seedFriendship("apple_user", "apple_friend", "apple", "accepted");
+    await seedFriendship("apple_user", "apple_pending", "apple", "pending");
+    const post = (await createPostForUid("apple_user", {
+      contentText: "Friends only",
+      visibility: "friends"
+    })).post;
+
+    await expect(togglePostLikeForUid("apple_stranger", {postId: post.id}))
+      .rejects.toMatchObject({code: "not-found"});
+    await expect(createCommentForUid("apple_pending", {
+      postId: post.id,
+      contentText: "Pending should not see this"
+    })).rejects.toMatchObject({code: "not-found"});
+    await expect(reportContentForUid("apple_stranger", {
+      targetType: "post",
+      targetId: post.id,
+      reason: "spam"
+    })).rejects.toMatchObject({code: "not-found"});
+
+    const like = await togglePostLikeForUid("apple_friend", {postId: post.id});
+    expect(like).toEqual({liked: true, likeCount: 1});
+    const comment = await createCommentForUid("apple_friend", {
+      postId: post.id,
+      contentText: "Accepted friend can comment"
+    });
+    expect(comment.comment.fruitCommunityId).toBe("apple");
+
+    const savedPost = await getFirestore().collection("posts").doc(post.id).get();
+    expect(savedPost.data()?.likeCount).toBe(1);
+    expect(savedPost.data()?.commentCount).toBe(1);
+    expect(savedPost.data()?.trendingScore).toBe(5);
   });
 
   it("creates a comment notification for the post author", async () => {
