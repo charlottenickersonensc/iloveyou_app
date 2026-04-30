@@ -152,7 +152,9 @@ service cloud.firestore {
     }
 
     match /notifications/{notificationId} {
-      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && isSameFruit(resource.data.fruitCommunityId);
       allow write: if false;
     }
 

@@ -85,6 +85,18 @@ public struct FeedPage {
     }
 }
 
+public struct NotificationPage {
+    public let notifications: [NotificationItem]
+    public let nextCursor: Any?
+    public let hasMore: Bool
+
+    public init(notifications: [NotificationItem], nextCursor: Any?, hasMore: Bool) {
+        self.notifications = notifications
+        self.nextCursor = nextCursor
+        self.hasMore = hasMore
+    }
+}
+
 public struct CreatePostInput: Equatable {
     public var contentText: String
     public var imageUrls: [URL]
@@ -223,4 +235,9 @@ public protocol MentalHealthRepository {
     func fetchTodayMoodCheckin(date: String) async throws -> MoodCheckin?
     func submitMoodCheckin(input: MoodCheckinInput) async throws -> MoodCheckin
     func getTodayAffirmation() async throws -> DailyAffirmation
+}
+
+public protocol NotificationRepository {
+    func fetchNotifications(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> NotificationPage
+    func markNotificationRead(notificationId: String) async throws
 }

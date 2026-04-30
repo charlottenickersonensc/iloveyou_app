@@ -293,3 +293,86 @@ public final class MentalHealthViewModel: ObservableObject {
         return String(format: "%04d-%02d-%02d", year, month, day)
     }
 }
+
+@MainActor
+public final class NotificationViewModel: ObservableObject {
+    @Published public private(set) var notifications: [NotificationItem] = []
+    @Published public private(set) var isLoading = false
+    @Published public private(set) var isLoadingMore = false
+    @Published public private(set) var hasMore = true
+    @Published public var errorMessage: String?
+
+    private let currentUser: User
+    private let repository: NotificationRepository
+    private let pageSize: Int
+    private var nextCursor: Any?
+
+    public init(currentUser: User, repository: NotificationRepository, pageSize: Int = 25) {
+        self.currentUser = currentUser
+        self.repository = repository
+        self.pageSize = pageSize
+    }
+
+    public func loadInitial() async {
+        guard notifications.isEmpty else { return }
+        isLoading = true
+        defer { isLoading = false }
+        await load(reset: true)
+    }
+
+    public func refresh() async {
+        await load(reset: true)
+    }
+
+    public func loadMoreIfNeeded(currentNotification: NotificationItem?) async {
+        guard hasMore,
+              !isLoadingMore,
+              let currentNotification,
+              currentNotification.id == notifications.last?.id else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+        await load(reset: false)
+    }
+
+    public func markRead(_ notification: NotificationItem) async {
+        guard !notification.isRead,
+              let index = notifications.firstIndex(where: { $0.id == notification.id }) else { return }
+        let original = notifications[index]
+        notifications[index] = copy(notification, isRead: true, readAt: Date())
+
+        do {
+            try await repository.markNotificationRead(notificationId: notification.id)
+        } catch {
+            notifications[index] = original
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func load(reset: Bool) async {
+        do {
+            let page = try await repository.fetchNotifications(
+                currentUser: currentUser,
+                pageSize: pageSize,
+                startAfter: reset ? nil : nextCursor
+            )
+            notifications = reset ? page.notifications : notifications + page.notifications
+            nextCursor = page.nextCursor
+            hasMore = page.hasMore
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func copy(_ notification: NotificationItem, isRead: Bool, readAt: Date?) -> NotificationItem {
+        NotificationItem(
+            id: notification.id,
+            userId: notification.userId,
+            fruitCommunityId: notification.fruitCommunityId,
+            title: notification.title,
+            body: notification.body,
+            isRead: isRead,
+            createdAt: notification.createdAt,
+            readAt: readAt
+        )
+    }
+}

@@ -31,6 +31,7 @@ export function buildNotification(id: string, input: NotificationInput) {
     title: input.title,
     body: input.body,
     isRead: false,
+    readAt: null,
     createdAt: FieldValue.serverTimestamp()
   };
 }

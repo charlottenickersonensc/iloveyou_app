@@ -231,6 +231,47 @@ final class MentalHealthViewModelTests: XCTestCase {
     }
 }
 
+final class NotificationViewModelTests: XCTestCase {
+    @MainActor
+    func testLoadFetchesCurrentUserFruitNotifications() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let notification = TestNotificationData.notification(id: "note-1", userId: currentUser.id)
+        let repository = MockNotificationRepository()
+        repository.pages = [
+            NotificationPage(notifications: [notification], nextCursor: "cursor-1", hasMore: true)
+        ]
+        let viewModel = NotificationViewModel(currentUser: currentUser, repository: repository, pageSize: 1)
+
+        await viewModel.loadInitial()
+
+        XCTAssertEqual(repository.fetches, [
+            RecordedNotificationFetch(userId: currentUser.id, fruitCommunityId: "apple", pageSize: 1, startAfter: nil)
+        ])
+        XCTAssertEqual(viewModel.notifications, [notification])
+        XCTAssertTrue(viewModel.hasMore)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    @MainActor
+    func testMarkReadSendsOnlyNotificationIdAndUpdatesLocalState() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let notification = TestNotificationData.notification(id: "note-1", userId: currentUser.id)
+        let repository = MockNotificationRepository()
+        repository.pages = [
+            NotificationPage(notifications: [notification], nextCursor: nil, hasMore: false)
+        ]
+        let viewModel = NotificationViewModel(currentUser: currentUser, repository: repository)
+
+        await viewModel.loadInitial()
+        await viewModel.markRead(notification)
+
+        XCTAssertEqual(repository.markedNotificationIds, ["note-1"])
+        XCTAssertEqual(viewModel.notifications.first?.isRead, true)
+        XCTAssertNotNil(viewModel.notifications.first?.readAt)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+}
+
 private enum TestSocialData {
     static func user(id: String, username: String, fruitCommunityId: String = "apple") -> User {
         User(
@@ -295,6 +336,21 @@ private enum TestMentalHealthData {
     }
 }
 
+private enum TestNotificationData {
+    static func notification(id: String, userId: String, isRead: Bool = false) -> NotificationItem {
+        NotificationItem(
+            id: id,
+            userId: userId,
+            fruitCommunityId: "apple",
+            title: "New like",
+            body: "Someone liked your post.",
+            isRead: isRead,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            readAt: nil
+        )
+    }
+}
+
 private enum TestFeedData {
     static func post(
         id: String,
@@ -329,6 +385,13 @@ private struct RecordedFeedFetch: Equatable {
 private struct RecordedFriendResponse: Equatable {
     let friendshipId: String
     let action: FriendRequestAction
+}
+
+private struct RecordedNotificationFetch: Equatable {
+    let userId: String
+    let fruitCommunityId: String
+    let pageSize: Int
+    let startAfter: String?
 }
 
 private final class MockFeedRepository: FeedRepository {
@@ -455,6 +518,27 @@ private final class MockMentalHealthRepository: MentalHealthRepository {
 
     func getTodayAffirmation() async throws -> DailyAffirmation {
         try affirmationResult.get()
+    }
+}
+
+private final class MockNotificationRepository: NotificationRepository {
+    var pages: [NotificationPage] = []
+    var fetches: [RecordedNotificationFetch] = []
+    var markedNotificationIds: [String] = []
+
+    func fetchNotifications(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> NotificationPage {
+        fetches.append(RecordedNotificationFetch(
+            userId: currentUser.id,
+            fruitCommunityId: currentUser.fruitCommunityId,
+            pageSize: pageSize,
+            startAfter: startAfter as? String
+        ))
+        guard !pages.isEmpty else { throw MockSocialError.missingResult }
+        return pages.removeFirst()
+    }
+
+    func markNotificationRead(notificationId: String) async throws {
+        markedNotificationIds.append(notificationId)
     }
 }
 

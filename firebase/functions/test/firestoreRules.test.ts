@@ -218,6 +218,7 @@ describe("Firestore fruit immutability rules", () => {
         title: "New friend request",
         body: "Carol sent you a friend request.",
         isRead: false,
+        readAt: null,
         createdAt: serverTimestamp()
       });
       await setDoc(doc(db, "moodCheckins/alice_20260102"), {
@@ -413,11 +414,19 @@ describe("Firestore fruit immutability rules", () => {
     }));
   });
 
-  it("allows own notification reads and rejects direct notification writes", async () => {
+  it("allows own same-fruit notification reads and rejects direct notification writes", async () => {
     const aliceDb = testEnv.authenticatedContext("alice").firestore();
     const bobDb = testEnv.authenticatedContext("bob").firestore();
+    const notificationQuery = query(
+      collection(aliceDb, "notifications"),
+      where("userId", "==", "alice"),
+      where("fruitCommunityId", "==", "apple"),
+      orderBy("createdAt", "desc"),
+      limit(25)
+    );
 
     await assertSucceeds(getDoc(doc(aliceDb, "notifications/note_1")));
+    await assertSucceeds(getDocs(notificationQuery));
     await assertFails(getDoc(doc(bobDb, "notifications/note_1")));
     await assertFails(setDoc(doc(aliceDb, "notifications/client_note"), {
       id: "client_note",
@@ -426,6 +435,33 @@ describe("Firestore fruit immutability rules", () => {
       type: "friend_request",
       fruitCommunityId: "apple"
     }));
+    await assertFails(updateDoc(doc(aliceDb, "notifications/note_1"), {
+      isRead: true,
+      readAt: serverTimestamp()
+    }));
+  });
+
+  it("rejects own notifications from another fruit", async () => {
+    const aliceDb = testEnv.authenticatedContext("alice").firestore();
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      const adminDb = context.firestore();
+      await setDoc(doc(adminDb, "notifications/cross_fruit_note"), {
+        id: "cross_fruit_note",
+        userId: "alice",
+        actorId: "bob",
+        type: "like",
+        entityType: "post",
+        entityId: "banana_post",
+        fruitCommunityId: "banana",
+        title: "Cross fruit",
+        body: "This should stay hidden.",
+        isRead: false,
+        readAt: null,
+        createdAt: serverTimestamp()
+      });
+    });
+
+    await assertFails(getDoc(doc(aliceDb, "notifications/cross_fruit_note")));
   });
 
   it("keeps mood check-ins private and callable-only", async () => {

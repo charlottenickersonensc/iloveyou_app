@@ -8,4 +8,5 @@ public struct NotificationItem: Identifiable, Codable, Equatable {
     public let body: String
     public let isRead: Bool
     public let createdAt: Date
+    public let readAt: Date?
 }

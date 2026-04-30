@@ -16,6 +16,7 @@ import {
   getTodayAffirmationForUid,
   submitMoodCheckinForUid
 } from "./services/mentalHealthService";
+import {markNotificationReadForUid} from "./services/notificationService";
 import {assertAuth} from "./utils/assertAuth";
 
 initializeApp();
@@ -68,4 +69,9 @@ export const submitMoodCheckin = onCall(async (request) => {
 export const getTodayAffirmation = onCall(async (request) => {
   const uid = assertAuth(request.auth);
   return getTodayAffirmationForUid(uid, request.data);
+});
+
+export const markNotificationRead = onCall(async (request) => {
+  const uid = assertAuth(request.auth);
+  return markNotificationReadForUid(uid, request.data);
 });

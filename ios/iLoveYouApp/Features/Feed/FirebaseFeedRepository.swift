@@ -234,6 +234,46 @@ public final class FirebaseMentalHealthRepository: MentalHealthRepository {
     }
 }
 
+public final class FirebaseNotificationRepository: NotificationRepository {
+    public init() {}
+
+    public func fetchNotifications(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> NotificationPage {
+        #if canImport(FirebaseFirestore)
+        var query: Query = Firestore.firestore().collection("notifications")
+            .whereField("userId", isEqualTo: currentUser.id)
+            .whereField("fruitCommunityId", isEqualTo: currentUser.fruitCommunityId)
+            .order(by: "createdAt", descending: true)
+            .limit(to: pageSize)
+
+        if let cursor = startAfter as? DocumentSnapshot {
+            query = query.start(afterDocument: cursor)
+        }
+
+        let snapshot = try await query.getDocuments()
+        let notifications = try snapshot.documents.map { document in
+            try NotificationMapper.map(id: document.documentID, data: document.data())
+        }
+        return NotificationPage(
+            notifications: notifications,
+            nextCursor: snapshot.documents.last,
+            hasMore: snapshot.documents.count == pageSize
+        )
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+
+    public func markNotificationRead(notificationId: String) async throws {
+        #if canImport(FirebaseFunctions)
+        _ = try await Functions.functions().httpsCallable("markNotificationRead").call([
+            "notificationId": notificationId
+        ])
+        #else
+        throw AuthRepositoryError.firebaseSDKUnavailable
+        #endif
+    }
+}
+
 private extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
@@ -367,6 +407,43 @@ private enum MentalHealthMapper {
             text: text,
             active: data["active"] as? Bool ?? true,
             source: data["source"] as? String ?? "scheduled"
+        )
+    }
+
+    private static func date(from value: Any?) -> Date? {
+        if let date = value as? Date {
+            return date
+        }
+        #if canImport(FirebaseFirestore)
+        if let timestamp = value as? Timestamp {
+            return timestamp.dateValue()
+        }
+        #endif
+        if let data = value as? [String: Any] {
+            let seconds = data["_seconds"] as? TimeInterval ?? data["seconds"] as? TimeInterval
+            let nanoseconds = data["_nanoseconds"] as? TimeInterval ?? data["nanoseconds"] as? TimeInterval ?? 0
+            if let seconds {
+                return Date(timeIntervalSince1970: seconds + nanoseconds / 1_000_000_000)
+            }
+        }
+        if let milliseconds = value as? TimeInterval {
+            return Date(timeIntervalSince1970: milliseconds / 1_000)
+        }
+        return nil
+    }
+}
+
+private enum NotificationMapper {
+    static func map(id: String, data: [String: Any]) throws -> NotificationItem {
+        NotificationItem(
+            id: id,
+            userId: data["userId"] as? String ?? "",
+            fruitCommunityId: data["fruitCommunityId"] as? String ?? "",
+            title: data["title"] as? String ?? "",
+            body: data["body"] as? String ?? "",
+            isRead: data["isRead"] as? Bool ?? false,
+            createdAt: date(from: data["createdAt"]) ?? Date(),
+            readAt: date(from: data["readAt"])
         )
     }
 
