@@ -1,9 +1,38 @@
 import Combine
 import Foundation
 
+public enum FeedMode: String, CaseIterable, Identifiable, Equatable {
+    case fruit
+    case trending
+
+    public var id: String { rawValue }
+
+    public var title: String {
+        switch self {
+        case .fruit: return "Fruit"
+        case .trending: return "Trending"
+        }
+    }
+
+    public var emptyTitle: String {
+        switch self {
+        case .fruit: return "No posts yet"
+        case .trending: return "No trending posts yet"
+        }
+    }
+
+    public var emptyDescription: String {
+        switch self {
+        case .fruit: return "Start the conversation."
+        case .trending: return "Likes and comments will lift posts here."
+        }
+    }
+}
+
 @MainActor
 public final class FeedViewModel: ObservableObject {
     @Published public private(set) var posts: [Post] = []
+    @Published public private(set) var feedMode: FeedMode = .fruit
     @Published public private(set) var isLoading = false
     @Published public private(set) var isRefreshing = false
     @Published public private(set) var isLoadingMore = false
@@ -34,6 +63,17 @@ public final class FeedViewModel: ObservableObject {
         await load(reset: true)
     }
 
+    public func selectFeedMode(_ mode: FeedMode) async {
+        guard mode != feedMode else { return }
+        feedMode = mode
+        posts = []
+        nextCursor = nil
+        hasMore = true
+        isLoading = true
+        defer { isLoading = false }
+        await load(reset: true)
+    }
+
     public func loadMoreIfNeeded(currentPost: Post?) async {
         guard hasMore, !isLoadingMore, let currentPost, currentPost.id == posts.last?.id else { return }
         isLoadingMore = true
@@ -48,7 +88,11 @@ public final class FeedViewModel: ObservableObject {
                 imageUrls: imageUrls,
                 visibility: visibility
             ))
-            posts.insert(post, at: 0)
+            if feedMode == .fruit {
+                posts.insert(post, at: 0)
+            } else {
+                await load(reset: true)
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -92,16 +136,30 @@ public final class FeedViewModel: ObservableObject {
 
     private func load(reset: Bool) async {
         do {
-            let page = try await feedRepository.fetchFruitFeed(
-                currentUser: currentUser,
-                pageSize: pageSize,
-                startAfter: reset ? nil : nextCursor
-            )
+            let page = try await fetchPage(reset: reset)
             posts = reset ? page.posts : posts + page.posts
             nextCursor = page.nextCursor
             hasMore = page.hasMore
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    private func fetchPage(reset: Bool) async throws -> FeedPage {
+        let cursor = reset ? nil : nextCursor
+        switch feedMode {
+        case .fruit:
+            return try await feedRepository.fetchFruitFeed(
+                currentUser: currentUser,
+                pageSize: pageSize,
+                startAfter: cursor
+            )
+        case .trending:
+            return try await feedRepository.fetchTrendingFeed(
+                currentUser: currentUser,
+                pageSize: pageSize,
+                startAfter: cursor
+            )
         }
     }
 

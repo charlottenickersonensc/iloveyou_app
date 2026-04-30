@@ -18,14 +18,20 @@ public struct FeedView: View {
                 MentalHealthHeaderView(viewModel: mentalHealthViewModel)
                     .listRowSeparator(.hidden)
 
+                FeedModePicker(
+                    selectedMode: viewModel.feedMode,
+                    onSelect: { mode in Task { await viewModel.selectFeedMode(mode) } }
+                )
+                .listRowSeparator(.hidden)
+
                 if viewModel.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                 } else if viewModel.posts.isEmpty {
                     ContentUnavailableView(
-                        "No posts yet",
+                        viewModel.feedMode.emptyTitle,
                         systemImage: "text.bubble",
-                        description: Text("Start the conversation.")
+                        description: Text(viewModel.feedMode.emptyDescription)
                     )
                     .listRowSeparator(.hidden)
                 } else {
@@ -91,6 +97,28 @@ public struct FeedView: View {
         Binding(
             get: { viewModel.errorMessage != nil },
             set: { if !$0 { viewModel.errorMessage = nil } }
+        )
+    }
+}
+
+private struct FeedModePicker: View {
+    let selectedMode: FeedMode
+    let onSelect: (FeedMode) -> Void
+
+    var body: some View {
+        Picker("Feed mode", selection: binding) {
+            ForEach(FeedMode.allCases) { mode in
+                Text(mode.title).tag(mode)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.vertical, DesignTokens.Spacing.sm)
+    }
+
+    private var binding: Binding<FeedMode> {
+        Binding(
+            get: { selectedMode },
+            set: { onSelect($0) }
         )
     }
 }

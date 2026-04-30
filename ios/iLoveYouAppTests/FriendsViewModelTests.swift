@@ -1,6 +1,86 @@
 import XCTest
 @testable import iLoveYouAppCore
 
+final class FeedViewModelTests: XCTestCase {
+    @MainActor
+    func testInitialLoadUsesFruitFeed() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let fruitPost = TestFeedData.post(id: "fruit-post", fruitCommunityId: currentUser.fruitCommunityId)
+        let repository = MockFeedRepository()
+        repository.fruitPages = [
+            FeedPage(posts: [fruitPost], nextCursor: "fruit-cursor", hasMore: true)
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository, pageSize: 1)
+
+        await viewModel.loadInitial()
+
+        XCTAssertEqual(repository.fruitFetches, [
+            RecordedFeedFetch(userId: currentUser.id, fruitCommunityId: "apple", pageSize: 1, startAfter: nil)
+        ])
+        XCTAssertTrue(repository.trendingFetches.isEmpty)
+        XCTAssertEqual(viewModel.feedMode, .fruit)
+        XCTAssertEqual(viewModel.posts, [fruitPost])
+        XCTAssertTrue(viewModel.hasMore)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    @MainActor
+    func testSelectingTrendingLoadsTrendingFeedAndClearsFruitPosts() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let fruitPost = TestFeedData.post(id: "fruit-post", fruitCommunityId: currentUser.fruitCommunityId)
+        let trendingPost = TestFeedData.post(
+            id: "trending-post",
+            fruitCommunityId: currentUser.fruitCommunityId,
+            likeCount: 5,
+            commentCount: 2,
+            trendingScore: 16
+        )
+        let repository = MockFeedRepository()
+        repository.fruitPages = [
+            FeedPage(posts: [fruitPost], nextCursor: nil, hasMore: false)
+        ]
+        repository.trendingPages = [
+            FeedPage(posts: [trendingPost], nextCursor: "trending-cursor", hasMore: true)
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository, pageSize: 10)
+
+        await viewModel.loadInitial()
+        await viewModel.selectFeedMode(.trending)
+
+        XCTAssertEqual(repository.trendingFetches, [
+            RecordedFeedFetch(userId: currentUser.id, fruitCommunityId: "apple", pageSize: 10, startAfter: nil)
+        ])
+        XCTAssertEqual(viewModel.feedMode, .trending)
+        XCTAssertEqual(viewModel.posts, [trendingPost])
+        XCTAssertTrue(viewModel.hasMore)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    @MainActor
+    func testTrendingPaginationUsesTrendingCursor() async {
+        let currentUser = TestSocialData.user(id: "uid-current", username: "current")
+        let firstPost = TestFeedData.post(id: "trending-1", fruitCommunityId: currentUser.fruitCommunityId)
+        let secondPost = TestFeedData.post(id: "trending-2", fruitCommunityId: currentUser.fruitCommunityId)
+        let repository = MockFeedRepository()
+        repository.trendingPages = [
+            FeedPage(posts: [firstPost], nextCursor: "cursor-1", hasMore: true),
+            FeedPage(posts: [secondPost], nextCursor: nil, hasMore: false)
+        ]
+        let viewModel = FeedViewModel(currentUser: currentUser, feedRepository: repository, pageSize: 1)
+
+        await viewModel.selectFeedMode(.trending)
+        await viewModel.loadMoreIfNeeded(currentPost: firstPost)
+
+        XCTAssertEqual(repository.trendingFetches, [
+            RecordedFeedFetch(userId: currentUser.id, fruitCommunityId: "apple", pageSize: 1, startAfter: nil),
+            RecordedFeedFetch(userId: currentUser.id, fruitCommunityId: "apple", pageSize: 1, startAfter: "cursor-1")
+        ])
+        XCTAssertEqual(viewModel.posts, [firstPost, secondPost])
+        XCTAssertFalse(viewModel.hasMore)
+        XCTAssertNil(viewModel.errorMessage)
+    }
+}
+
 final class FriendsViewModelTests: XCTestCase {
     @MainActor
     func testLoadFetchesFriendsRequestsAndRelationshipStates() async {
@@ -215,9 +295,101 @@ private enum TestMentalHealthData {
     }
 }
 
+private enum TestFeedData {
+    static func post(
+        id: String,
+        fruitCommunityId: String,
+        likeCount: Int = 0,
+        commentCount: Int = 0,
+        trendingScore: Int = 0
+    ) -> Post {
+        Post(
+            id: id,
+            authorId: "uid-author",
+            authorUsername: "author",
+            authorDisplayUsername: "Author",
+            fruitCommunityId: fruitCommunityId,
+            contentText: "Post \(id)",
+            likeCount: likeCount,
+            commentCount: commentCount,
+            trendingScore: trendingScore,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            updatedAt: Date(timeIntervalSince1970: 1_700_000_000)
+        )
+    }
+}
+
+private struct RecordedFeedFetch: Equatable {
+    let userId: String
+    let fruitCommunityId: String
+    let pageSize: Int
+    let startAfter: String?
+}
+
 private struct RecordedFriendResponse: Equatable {
     let friendshipId: String
     let action: FriendRequestAction
+}
+
+private final class MockFeedRepository: FeedRepository {
+    var fruitPages: [FeedPage] = []
+    var trendingPages: [FeedPage] = []
+    var fruitFetches: [RecordedFeedFetch] = []
+    var trendingFetches: [RecordedFeedFetch] = []
+    var createPostInputs: [CreatePostInput] = []
+
+    func fetchFruitFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage {
+        fruitFetches.append(RecordedFeedFetch(
+            userId: currentUser.id,
+            fruitCommunityId: currentUser.fruitCommunityId,
+            pageSize: pageSize,
+            startAfter: startAfter as? String
+        ))
+        guard !fruitPages.isEmpty else { throw MockSocialError.missingResult }
+        return fruitPages.removeFirst()
+    }
+
+    func fetchTrendingFeed(currentUser: User, pageSize: Int, startAfter: Any?) async throws -> FeedPage {
+        trendingFetches.append(RecordedFeedFetch(
+            userId: currentUser.id,
+            fruitCommunityId: currentUser.fruitCommunityId,
+            pageSize: pageSize,
+            startAfter: startAfter as? String
+        ))
+        guard !trendingPages.isEmpty else { throw MockSocialError.missingResult }
+        return trendingPages.removeFirst()
+    }
+
+    func createPost(input: CreatePostInput) async throws -> Post {
+        createPostInputs.append(input)
+        return TestFeedData.post(id: "created-post", fruitCommunityId: "apple")
+    }
+
+    func uploadPostImages(_ images: [PostImageUpload], draftPostId: String) async throws -> [URL] {
+        []
+    }
+
+    func toggleLike(postId: String) async throws -> LikeResult {
+        LikeResult(liked: true, likeCount: 1)
+    }
+
+    func createComment(postId: String, contentText: String) async throws -> PostComment {
+        PostComment(
+            id: "comment-1",
+            postId: postId,
+            authorId: "uid-current",
+            authorDisplayUsername: "Current",
+            authorAvatarUrl: nil,
+            fruitCommunityId: "apple",
+            contentText: contentText,
+            reportCount: 0,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            updatedAt: Date(timeIntervalSince1970: 1_700_000_000),
+            deletedAt: nil
+        )
+    }
+
+    func reportContent(input: ReportContentInput) async throws {}
 }
 
 private final class MockFriendsRepository: FriendsRepository {
